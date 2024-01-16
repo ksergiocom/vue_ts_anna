@@ -1,7 +1,7 @@
 import {collection, getDocs} from 'firebase/firestore'
 
 import {db} from '@/firebase'
-import { Photo } from '@/types'
+import {Photo} from '@/types'
 
 class PhotosService {
     public static async getPhotos():Promise<Photo[]>{
