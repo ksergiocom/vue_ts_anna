@@ -49,11 +49,13 @@
         background-color: rgb(172, 151, 128);
         width: 100%;
         height: 100%;
-        padding: 3rem;
         display: grid;
-        grid-template-columns: repeat(auto-fit, 200px);
+        grid-template-columns: repeat(2, 1fr); /* Dos columnas de igual ancho */
+        grid-auto-rows: calc(0.67 * (100vw / 2)); 
+
+        /* grid-template-columns: repeat(auto-fit, 200px);
+        grid-auto-rows: 120px; */
         grid-auto-flow: dense;
-        grid-auto-rows: 120px;
         gap: 5px;
         justify-content: center;
     }
@@ -72,22 +74,6 @@ img{
     width: 100%;
 }
 
-/* Esta es la forma fija de colocar el grid */
-
-/* .celda:first-child{
-    grid-column: span 2;
-    grid-row: span 2;
-}
-
-.celda:nth-child(3n){
-    grid-row: span 2;
-}
-
-.celda:nth-child(4n){
-    grid-row: span 2;
-    grid-column: span 2;
-} */
-
 .h2{
     grid-column: span 2;
     grid-row: span 2;
@@ -96,4 +82,19 @@ img{
 .v{
     grid-row: span 2;
 }
+
+@media (min-width:800px) {
+    section{
+        grid-template-columns: repeat(3, 1fr); /* Dos columnas de igual ancho */
+        grid-auto-rows: calc(0.67 * (100vw / 3)); 
+    }
+}
+
+@media (min-width:1200px) {
+    section{
+        grid-template-columns: repeat(4, 1fr); /* Dos columnas de igual ancho */
+        grid-auto-rows: calc(0.67 * (100vw / 3)); 
+    }
+}
+
 </style>
