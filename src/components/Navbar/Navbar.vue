@@ -16,6 +16,9 @@
 <style scoped>
     nav{
         display: flex;
+        position: sticky;
+        top: 0;
+        background-color: white;
         justify-content: space-between;
         padding: 1rem 1.3rem;
     }
