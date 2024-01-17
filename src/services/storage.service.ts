@@ -8,7 +8,7 @@ class StorageService {
 
         Array.from(files).forEach(file=> {
             const originalFileName = file.name
-            const photoFileRef = ref(storage, originalFileName)
+            const photoFileRef = ref(storage, 'public_photos/'+originalFileName)
             const promise = uploadBytes(photoFileRef, file)
             console.log(originalFileName)
 

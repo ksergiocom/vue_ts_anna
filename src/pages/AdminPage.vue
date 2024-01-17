@@ -32,7 +32,7 @@
     <h1>Admin Page</h1>
     <p>Public photos</p>
     <ul>
-        <li v-for="photo in photos" :key="photo.id">{{ photo.name }}</li>
+        <li v-for="photo in photos" :key="photo.id">{{ photo.urlPublica }}</li>
     </ul>
     <input type="file" multiple @change="handleFileChange" />
     <button @click="uploadFile">Subir Archivo</button>

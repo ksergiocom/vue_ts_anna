@@ -12,9 +12,18 @@ class PhotosService {
         querySnapshot.forEach((doc) => {
             publicPhotos.push({
                 id:doc.id,
-                name:doc.data().name
+                nombreNuevo:doc.data().nombreNuevo,
+                nombreOriginal:doc.data().nombreOriginal,
+                filePath:doc.data().filePath,
+                ancho: doc.data().ancho,
+                alto: doc.data().alto,
+                orientacion: doc.data().orientacion,
+                pesoNuevo: doc.data().pesoNuevo,
+                fechaSubida: doc.data().fechaSubida,
+                borrada: doc.data().borrada,
+                urlPublica: doc.data().urlPublica
             })
-        })
+        })  
 
         return publicPhotos
     }
