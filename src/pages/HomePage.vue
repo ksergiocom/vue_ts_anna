@@ -1,7 +1,7 @@
 <script setup lang="ts">
-
+    import Gallery from '@/components/Gallery.vue'
 </script>
 
 <template>
-    <h1>Home page!</h1>
+    <Gallery/>
 </template>

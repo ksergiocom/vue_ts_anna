@@ -16,7 +16,11 @@ const db = admin.firestore()
 /**
  * Resize de la imagen, cambiado a Webp y cambiado de nombre. Se borra la original.
  */
-exports.resizeImagen = onObjectFinalized({ cpu: 2, region: 'europe-west3' }, async (event) => {
+exports.resizeImagen = onObjectFinalized({ 
+  cpu: 2,
+  region: 'europe-west3',
+  memory:'1GiB',
+}, async (event) => {
 
   const fileBucket = event.data.bucket; // Bucket de almacenamiento que contiene el archivo.
   const filePath = event.data.name; // Ruta del archivo en el bucket.
