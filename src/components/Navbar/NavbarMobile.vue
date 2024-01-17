@@ -64,7 +64,6 @@
     }
 
     .menu-body{
-        display: flex;
         background-color: white;
         position: fixed;
         top:0;

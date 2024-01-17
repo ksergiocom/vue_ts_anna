@@ -1,6 +1,7 @@
 <script setup lang="ts">
+    import Spinner from '@/components/UI/Spinner.vue';
     // import { Photo } from '@/types';
-    import {defineProps,ref} from 'vue'
+    import {ref} from 'vue'
 
     const props = defineProps<{
         // photo: Photo;
@@ -17,29 +18,38 @@
 </script>
 
 <template>
-    <div>
-        <div v-show="!isLoaded" class="load-container">Cargando....</div>
-        <div class="image-wrapper" v-show="isLoaded">
-            <img @load="handleImageLoad" :src="props.photo.url" :alt="'texto-alt'">
+    <figure class="image__container">
+        <div class="image__container--spinner">
+            <Spinner color="white" :opacity="80"></Spinner>
         </div>
-    </div>
+        <img class="image__container--img" @load="handleImageLoad" :data-src="props.photo.url">
+    </figure>
 </template>
 
 <style scoped>
-    div ,img{
+    .image__container{
         height: 100%;
         width: 100%;
-    }
-
-    img{
-        object-fit: cover;
-    }
-
-    .load-container{
+        overflow: hidden;
         background-color: black;
+        position: relative;
+    }
+
+    .image__container--spinner{
+        height: 100%;
+        display: grid;
+        place-content: center;
+    }
+
+    .image__container--img{
+        position: absolute;
         top: 0;
-        left: 0;
-        color: white;
+        left:0;
+
+        opacity: 80%;
+        background-color: red;
+        height: 100%;
+        width: 100%;
     }
 
 

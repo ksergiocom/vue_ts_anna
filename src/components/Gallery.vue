@@ -45,7 +45,6 @@
 
 <style scoped>
     section {
-        background-color: rgb(172, 151, 128);
         width: 100%;
         height: 100%;
         display: grid;
@@ -67,8 +66,6 @@ img{
 
 .celda{
     display: flex;
-    background-color: black;
-    color: white;
     height: 100%;
     width: 100%;
 }

@@ -1,40 +1,34 @@
-<script setup lang="ts">
-    import {defineProps,withDefaults} from 'vue'
-
-    const props = withDefaults(defineProps<{
-        color?:'white'|'black'
+<script  setup  lang="ts">
+    import {withDefaults} from  'vue'
+    const  props  =  withDefaults(defineProps<{
+        color?:string
+        opacity?:number
     }>(),{
-        color:'black'
+        color:'black',
+        opacity:100,
     })
 </script>
 
 <template>
-    <span :class="[props.color]"></span>
+    <div>
+        <span :style="`color:${props.color}; opacity:${props.opacity}%`"></span>
+    </div>
 </template>
 
-<style scoped>
+
+<style  scoped>
     span{
-        display: inline-block;
+        display: block;
         height: 2rem;
         width: 2rem;
         opacity: 50%;
-        border: 0.35rem solid;
+        border: 0.35rem  solid;
         border-radius: 50%;
-
-        animation: spin linear 1s infinite;
-    }
-    
-    .black{
-        border-color: black;
         border-left-color: transparent;
+        animation: spin linear  1s  infinite;
     }
 
-    .white{
-        border-color: white;
-        border-left-color: transparent;
-    }
-
-    @keyframes spin{
+    @keyframes  spin{
         0% {
             transform: rotate(0deg);
         }
@@ -42,6 +36,4 @@
             transform: rotate(360deg);
         }
     }
-
-
 </style>
