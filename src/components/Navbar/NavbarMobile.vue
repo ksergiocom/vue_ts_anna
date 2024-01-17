@@ -17,14 +17,34 @@
         <Transition>
             <div v-show="showMenu" class="menu-body">
                 <img @click="toggleShowMenu(false)" class="close-menu-btn menu-btn" :src="CloseSVG"/>
-                <p>Menu Body</p>
-                <p>{{ showMenu }}</p>
+                <ul>
+                    <li><RouterLink @click="toggleShowMenu(false)" to="/">About me</RouterLink></li>
+                    <li><RouterLink @click="toggleShowMenu(false)" to="/">Portfolio</RouterLink></li>
+                    <li><RouterLink @click="toggleShowMenu(false)" to="/">Investment</RouterLink></li>
+                    <li><RouterLink @click="toggleShowMenu(false)" to="/admin">Contact</RouterLink></li>
+                </ul>
             </div>
         </Transition>
     </div>
 </template>
 
 <style scoped>
+    ul {
+        padding: 2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    a{
+        opacity: 50%;
+        color: black;
+        text-decoration: none;
+        letter-spacing: 0.1rem;
+        font-size: 1.5rem;
+        text-transform: uppercase;
+    }
+
     .btn-container{
         display: grid;
         place-content: center;
@@ -53,14 +73,13 @@
         width: 100vw;
     }
 
-
     .v-enter-active,
-.v-leave-active {
-  transition: all 0.2s ease;
-}
+    .v-leave-active {
+    transition: all 0.22s ease-in-out;
+    }
 
-.v-enter-from,
-.v-leave-to {
-  transform: translateX(-100%);
-}
+    .v-enter-from,
+    .v-leave-to {
+    transform: translateX(-100%);
+    }
 </style>
