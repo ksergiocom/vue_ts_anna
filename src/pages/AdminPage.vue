@@ -2,6 +2,8 @@
     import {Photo} from '@/types'
     import {onMounted, ref} from 'vue'
 
+    import Spinner from '@/components/UI/Spinner.vue'
+
     import {PhotosService} from '@/services/photos.service'
     import {StorageService} from '@/services/storage.service'
 
@@ -30,6 +32,7 @@
 
 <template>
     <h1>Admin Page</h1>
+    <Spinner/>
     <p>Public photos</p>
     <ul>
         <li v-for="photo in photos" :key="photo.id">{{ photo.urlPublica }}</li>

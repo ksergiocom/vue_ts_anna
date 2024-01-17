@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    // import Image from '@/components/Image.vue'
+    import Image from '@/components/Image.vue'
     import {ref, onMounted} from 'vue'
     // import {PhotosService} from '@/services/photos.service'
     // import { Photo } from '@/types';
@@ -10,8 +10,8 @@
     onMounted(async () => {
         // photos.value = await PhotosService.getPhotos()
         
-        // const res = await fetch('https://picsum.photos/v2/list')
-        // const photos = await res.json()
+        const res = await fetch('https://picsum.photos/v2/list')
+        const photos = await res.json()
 
         for(let i=0;i<30;i++){
             const orientacion = Math.random() > 0.5 ? 'h':'v'
@@ -24,8 +24,7 @@
             mocks.value.push({
                 orientacion,
                 clase,
-                // url: photos[i].download_url,
-                url:''
+                url: photos[i].download_url,
             })
         }
     })
@@ -37,10 +36,10 @@
 
 <template>
     <section>
-        <div :class="['celda',i.clase]" v-for="i in mocks" :key="i">
-            <img :src="i.url" alt="a">
+        <div v-for="i in mocks" :class="['celda',i.clase]" :key="i">
+            <!-- <img :src="i.url" alt="a"> -->
+            <Image :key="i" :photo="i"/>
         </div>
-        <!-- <Image v-for="photo in photos" :key="photo.id" :photo="photo"/> -->
     </section>
 </template>
 
