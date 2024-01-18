@@ -24,20 +24,32 @@
 
 <style scoped>
     div{
-        background-color: rgba(0, 0, 0, 0.05);
+        display: flex;
+        height: 100%;
+        width: 100%;
+        background-color: rgba(0,0,0,0.05);
     }
 
     img{
         height: 100%;
         width: 100%;
         object-fit: cover;
-        transition: all 250ms ease-in-out;
+        transition: all 220ms ease-in;
         overflow: hidden;
     }
 
     .image[lazy="loading"] {
         opacity: 0;
-        filter: blur(4px);
+        overflow: hidden;
+
+    }
+
+    .image[lazy="loaded"] {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+        overflow: hidden;
+
     }
 
 

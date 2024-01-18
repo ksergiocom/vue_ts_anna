@@ -49,7 +49,7 @@
         // Voy a usar un array que almacena las dos ultimas clases aplicadas.
         const ultimasClasses:Array<'v'|'v2'|'h'|'h2'> = []
 
-        return photos.value.map((photo,idx)=>{
+        const photosWithClasses = photos.value.map((photo,idx)=>{
             const {orientacion} = photo
 
             // TS me obliga a declarar un default. Si no da error abajo.
@@ -93,6 +93,8 @@
                 cssClass,
             }
         })
+
+        return photosWithClasses
     })
 
 
@@ -122,27 +124,26 @@
         justify-content: center;
     }
 
-img{
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
+    img{
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
 
-.celda{
-    display: flex;
-    height: 100%;
-    width: 100%;
-}
+    .celda{
+        display: flex;
+        height: 100%;
+        width: 100%;
+    }
 
-.h2{
-    grid-column: span 2;
-    grid-row: span 2;
-}
+    .h2{
+        grid-column: span 2;
+        grid-row: span 2;
+    }
 
-.v{
-    grid-row: span 2;
-}
-
+    .v{
+        grid-row: span 2;
+    }
 
 
 @media (min-width:800px) {
