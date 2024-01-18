@@ -1,11 +1,24 @@
-import {collection, getDocs} from 'firebase/firestore'
+import {collection, getDocs, query, limit} from 'firebase/firestore'
 
 import {db} from '@/firebase'
 import {Photo} from '@/types'
 
 class PhotosService {
-    public static async getPhotos():Promise<Photo[]>{
-        const querySnapshot = await getDocs(collection(db,'public_photos'))
+    public static async getPublicPhotos(limitTo:number=24):Promise<Photo[]>{
+
+        /*
+          Es importante que el limit sea un multiplo de 4.
+          Los elementos que se colocan en el grid son:
+          a=(1,1)
+          b=(2,1) , b=2a
+          c=(2,2) , c=2b , c=4a
+
+          Si no son multiplos de 4 pueden dejar huecos en el grid.
+        */
+       
+        const q = query(collection(db,'public_photos'),limit(limitTo))
+
+        const querySnapshot = await getDocs(q)
         
         const publicPhotos:Photo[] = []
 

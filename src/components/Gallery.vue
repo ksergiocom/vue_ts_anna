@@ -1,34 +1,99 @@
 <script setup lang="ts">
     import Image from '@/components/Image.vue'
-    import {ref, onMounted} from 'vue'
-    // import {PhotosService} from '@/services/photos.service'
-    // import { Photo } from '@/types';
+    import {ref, onMounted, computed} from 'vue'
+    import {PhotosService} from '@/services/photos.service'
+    import { Photo } from '@/types'
 
-    // let photos = ref<Photo[]>([])
-    let mocks = ref<any[]>([])
+    const photos = ref<Photo[]>([])
+    /*
+      Romper la simetría.
 
-    onMounted(async () => {
-        // photos.value = await PhotosService.getPhotos()
-        
-        const res = await fetch('https://picsum.photos/v2/list')
-        const photos = await res.json()
+      Para romper la simetría inicial los dos primeros elementos tiene que tener altos diferentes.
+      Esto lo consigo usando una imagen vertical y una horizontal pequeña, o viceversa.
+      No utilizo la vertical y la horizontal grande porque tienen el mismo alto, por lo que quedan rectas.
 
-        for(let i=0;i<30;i++){
-            const orientacion = Math.random() > 0.5 ? 'h':'v'
-            let clase
-            if(orientacion == 'h'){
-                clase = Math.random() > 0.5 ? '2h': 'h'
-            }else{
-                clase = 'v'
-            }
-            mocks.value.push({
-                orientacion,
-                clase,
-                url: photos[i].download_url,
-            })
+      Ahora lo importante es buscar la primera imagen vertical y la primera horizontal
+      y colocarlas como las dos primeras para poder crear este efecto.
+    */
+
+    onMounted(async () => {  
+        // Deben ser multiplos de 4 para evitar huecos en el grid
+        const photosJSON = await PhotosService.getPublicPhotos(4*20)
+
+        // Busco la primer foto horizontal y la primer vertical
+        const idxPhotoHorizontal = photos.value.findIndex(photo=>photo.orientacion=='horizontal')
+        const photoHorizontal = photos.value.splice(idxPhotoHorizontal,1)
+
+        const idxPhotoVertical = photos.value.findIndex(photo=>photo.orientacion=='vertical')
+        const photoVertical = photos.value.splice(idxPhotoVertical,1)
+
+        /*
+          Inserto las dos fotos en las dos primeras posiciones, en orden "aleatorio".
+        */
+        if(Math.random()>0.5){
+            // El spread operator es por haber usado el splice arriba...
+            photosJSON.unshift(...photoHorizontal)
+            photosJSON.unshift(...photoVertical)
+        }else{
+            photosJSON.unshift(...photoVertical)
+            photosJSON.unshift(...photoHorizontal)
         }
+
+        photos.value = photosJSON
+
     })
 
+    // Asignando las clases de CSS
+    const computedPhotos = computed(()=>{
+
+        // Voy a usar un array que almacena las dos ultimas clases aplicadas.
+        const ultimasClasses:Array<'v'|'v2'|'h'|'h2'> = []
+
+        return photos.value.map((photo,idx)=>{
+            const {orientacion} = photo
+
+            // TS me obliga a declarar un default. Si no da error abajo.
+            let cssClass:'v'|'v2'|'h'|'h2' = 'h'
+
+            if(orientacion == 'vertical'){
+                cssClass = 'v'
+                /*
+                  Si las dos ultimas clases usadas son la misma cambiarla por 
+                  una horizontal. Aunque la imagen sea vertical. Da igual.
+                */
+                if(ultimasClasses.length>1 && ultimasClasses.every(el=>el==='v')){
+                    cssClass = 'h'
+                }
+            }
+            if(orientacion == 'horizontal'){
+                
+                cssClass = Math.random() > 0.5 ? 'h2' : 'h'
+                /*
+                    El primer y segundo elemento nunca puede ser uno grande.
+                    Porque como va acompañado con un elemento vertical, no crearía 
+                    la asimetría que buscamos. (Se quedarían como a la misma altura)
+                */
+                if(idx==0 || idx==1){
+                   cssClass = 'h'
+                }
+
+                // Si la clase seleccionada es la misma que las dos ultimas, cambiarla por la otra
+                if(ultimasClasses.length>1 && ultimasClasses.every(el=>el==='h')){
+                    cssClass = cssClass == 'h' ? 'h2' : 'h'
+                }
+            }
+            
+            ultimasClasses.push(cssClass)
+            if(ultimasClasses.length>2){
+                ultimasClasses.shift()
+            }
+            
+            return{
+                ...photo,
+                cssClass,
+            }
+        })
+    })
 
 
 
@@ -36,9 +101,8 @@
 
 <template>
     <section>
-        <div v-for="i in mocks" :class="['celda',i.clase]" :key="i">
-            <!-- <img :src="i.url" alt="a"> -->
-            <Image :key="i" :photo="i"/>
+        <div v-for="photo in computedPhotos" :class="['celda',photo.cssClass]" :key="photo.id">
+            <Image :photo="photo"/>
         </div>
     </section>
 </template>
@@ -78,6 +142,8 @@ img{
 .v{
     grid-row: span 2;
 }
+
+
 
 @media (min-width:800px) {
     section{

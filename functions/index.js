@@ -25,6 +25,7 @@ exports.resizeImagen = onObjectFinalized({
   const fileBucket = event.data.bucket; // Bucket de almacenamiento que contiene el archivo.
   const filePath = event.data.name; // Ruta del archivo en el bucket.
   const contentType = event.data.contentType; // Tipo de contenido del archivo.
+  const fileName = path.basename(filePath).split('.')[0] // El nombre del archivo sin la extension
 
 
   // Salir si esto se activa en un archivo que no es una imagen.
@@ -48,14 +49,14 @@ exports.resizeImagen = onObjectFinalized({
   logger.log("Imagen descargada!");
 
   // Generar una miniatura utilizando sharp.
-  const nuevoNombre = 'rszd_'+nanoid()+'.webp'
+  const nuevoNombre = 'rszd_'+fileName+'.webp'
   const thumbnailBuffer = await sharp(imageBuffer).resize({
-    width: 1920,
-    height: 1920,
+    width: 800,
+    height: 800,
     fit: 'inside',
     withoutEnlargement: true,
   })
-  .webp()
+  .webp({quality:85})
   .toBuffer()
   logger.log("Imagen transformada");
 
