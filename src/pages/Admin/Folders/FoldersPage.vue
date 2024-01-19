@@ -2,10 +2,11 @@
     import { ref, onMounted } from 'vue';
     import {StorageService} from '@/services/storage.service'
 
-    let folders = ref([])
+    const folders = ref<String[]>([])
+   
 
     onMounted(async ()=>{
-        await StorageService.getSharedFolders()
+        folders.value = await StorageService.getFolders('shared')
     })
 </script>
 
@@ -13,7 +14,9 @@
     <div>
         <h3>Folders page</h3>
         <ul>
-            <li v-for="folder in folders">{{ folder }}</li>
+            <li v-for="folder in folders">
+                <RouterLink :to="`/admin/folders/${folder}`">{{ folder }}</RouterLink>
+            </li>
         </ul>
     </div>
 </template>

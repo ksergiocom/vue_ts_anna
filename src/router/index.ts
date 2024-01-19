@@ -10,7 +10,10 @@ import SignOutPage from '@/pages/Auth/SignOutPage.vue'
 
 import AdminLayout from '@/pages/Admin/AdminLayout.vue'
 import AdminUsersPage from '@/pages/Admin/UsersPage.vue'
-import AdminFoldersPage from '@/pages/Admin/FoldersPage.vue'
+
+import AdminFolderLayout from '@/pages/Admin/Folders/FolderLayout.vue'
+import AdminFoldersPage from '@/pages/Admin/Folders/FoldersPage.vue'
+import AdminFolderContentPage from '@/pages/Admin/Folders/FolderContent.vue'
 
 const routes = [
     {path:'/', component: HomePage},
@@ -19,7 +22,20 @@ const routes = [
         component: AdminLayout,
         children:[
             {path:'', redirect:'/admin/folders'},
-            {path:'folders', component: AdminFoldersPage},
+            {
+                path:'folders',
+                component: AdminFolderLayout,
+                children:[
+                    {
+                        path:'',
+                        component: AdminFoldersPage,
+                    },
+                    {
+                        path:':folderName',
+                        component: AdminFolderContentPage
+                    }
+                ]
+            },
             {path:'users', component: AdminUsersPage},
         ]
     },

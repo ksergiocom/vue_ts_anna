@@ -6,13 +6,22 @@ const storage = getStorage(app);
 
 class StorageService {
     
-    public static async getSharedFolders(){
-        const listRef = ref(storage,'shared')
+    public static async getFolders(path:string){
+        const listRef = ref(storage,path)
 
         const res = await listAll(listRef)
         const folders = res.prefixes.map(folder=>folder.name)
         
-        console.log(folders)
+        return folders
+    }
+
+    public static async getFiles(path:string){
+        const listRef = ref(storage,path)
+
+        const res = await listAll(listRef)
+        const files = res.items.map(file=>file.name)
+        
+        return files
     }
 
 
