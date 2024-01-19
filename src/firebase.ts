@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app"
 import { getFirestore } from 'firebase/firestore'
-// import 'firebase/storage'
+import { getAuth,onAuthStateChanged } from 'firebase/auth'
 
 
 const firebaseConfig = {
@@ -15,8 +15,18 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig)
 const db = getFirestore(app)
+const auth = getAuth(app)
+
+onAuthStateChanged(auth, (user) => {
+  if(user){
+    console.log('User signed in!')
+  }else{
+    console.log('User signed out!')
+  }
+})
 
 export {
   db,
   app,
+  auth,
 }

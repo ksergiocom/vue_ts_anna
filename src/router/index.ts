@@ -1,11 +1,49 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { auth } from '@/firebase'
 
 import HomePage from './../pages/HomePage.vue'
-import AdminPage from '@/pages/AdminPage.vue'
+import ContactPage from '@/pages/ContactPage.vue'
+import SharedPage from '@/pages/SharedPage.vue'
+import NotFoundPage from '@/pages/NotFoundPage.vue'
+import SignInPage from '@/pages/Auth/SignInPage.vue'
+import SignOutPage from '@/pages/Auth/SignOutPage.vue'
+
+import AdminLayout from '@/pages/Admin/AdminLayout.vue'
+import AdminUsersPage from '@/pages/Admin/UsersPage.vue'
+import AdminFoldersPage from '@/pages/Admin/FoldersPage.vue'
 
 const routes = [
     {path:'/', component: HomePage},
-    {path:'/admin', component: AdminPage},
+    {
+        path:'/admin',
+        component: AdminLayout,
+        children:[
+            {path:'', redirect:'/admin/folders'},
+            {path:'folders', component: AdminFoldersPage},
+            {path:'users', component: AdminUsersPage},
+        ]
+    },
+    {path:'/contact', component: ContactPage},
+    {
+        path:'/shared/:id',
+        component: SharedPage,
+        beforeEnter: (_to:any, _from:any) => {
+            const user = auth.currentUser
+            if(!user) return '/sign-in'
+            return true
+        },
+    },
+    {
+        path:'/sign-in',
+        component: SignInPage,
+        beforeEnter: (_to:any, _from:any) => {
+            const user = auth.currentUser
+            if(user) return '/'
+            return true
+        },
+    },
+    {path:'/sign-out', component: SignOutPage},
+    {path:'/:pathMatch(.*)*', component: NotFoundPage },
 ]
 
 const router = createRouter({

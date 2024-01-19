@@ -1,6 +1,6 @@
 const { onObjectFinalized, onObjectDeleted } = require("firebase-functions/v2/storage");
 const { getStorage , getDownloadURL} = require("firebase-admin/storage");
-const { nanoid } = require("nanoid");
+// const { nanoid } = require("nanoid");
 const logger = require("firebase-functions/logger");
 const path = require('path')
 const {FieldValue} = require('firebase-admin/firestore')
@@ -33,14 +33,44 @@ exports.resizeImagen = onObjectFinalized({
     return logger.log("Esto no es una imagen.");
   }
 
+  // Aqui las imagenes SHARED
+  if(filePath.startsWith('shared/')){
+    const bucket = getStorage().bucket(fileBucket);
+    const url = await getDownloadURL(bucket.file(filePath))
+    const downloadResponse = await bucket.file(filePath).download();
+    const imageBuffer = downloadResponse[0];
+
+    const metadata = await sharp(imageBuffer).metadata()
+
+    const folderName = filePath.split('/')[1]
+
+    // Guardar datos en Firestore
+    const datosFirestore = {
+      nombreOriginal: path.basename(filePath),
+      // nombreNuevo: nuevoNombre,
+      filePath: filePath,
+      ancho: metadata.width, // Coloca el valor real del ancho de la imagen
+      alto: metadata.height, // Coloca el valor real del alto de la imagen
+      orientacion: metadata.width>metadata.height ? "horizontal":"vertical", // Ajusta según la orientación real de la imagen
+      pesoOriginal: imageBuffer.length, // Tamaño en bytes del archivo original
+      // pesoNuevo: thumbnailBuffer.length, // Tamaño en bytes de la miniatura
+      fechaSubida: FieldValue.serverTimestamp(),
+      urlPublica: url, // URL para servir en el frontend
+    }
+  
+    await db.collection('shared').doc(folderName).collection('photos').add(datosFirestore)
+    return logger.log('Se ha guardado una imagen para compartir')
+  }
+
+
+  // Solo las fotos que van a public tienen que ser redimensinoadas. El resto van RAW tal cual se suben
+  if(!filePath.startsWith('public_photos/')){
+    return logger.log("Este archivo no es publico por eso se sube RAW")
+  }
   if (filePath.includes('rszd_')){
     return logger.log("Esta imagen ya se ha sido tratada.")
   }
 
-  // Solo las fotos que van a public tienen que ser redimensinoadas. El resto van RAW tal cual se suben
-  if(!filePath.startsWith('public_photos')){
-    return logger.log("Este archivo no es publico por eso se sube RAW")
-  }
 
   // Descargar el archivo en memoria desde el bucket.
   const bucket = getStorage().bucket(fileBucket);
@@ -95,12 +125,27 @@ exports.resizeImagen = onObjectFinalized({
 exports.deleteImage = onObjectDeleted({ cpu: 2, region: 'europe-west3' },async event => {
   const filePath = event.data.name; // Ruta del archivo en el bucket.
 
-  console.log(filePath)
+  // PUBLICAS
+  if(filePath.startsWith('public_photos/')){
+    const qs = await db.collection('public_photos').where("filePath","==",filePath).get()
+    
+    qs.docs.forEach(doc=>{
+      doc.ref.delete()
+    })
 
-  const qs = await db.collection('public_photos').where("filePath","==",filePath).get()
+    return logger.log('Se ha borrado una imagen publica')
+  }
 
-  qs.docs.forEach(doc=>{
-    doc.ref.delete()
-  })
+  // SHARED
+  if(filePath.startsWith('shared/')){
+    const folderName = filePath.split('/')[1]
 
+    const qs = await db.collection('shared').doc(folderName).collection('photos').where("filePath","==",filePath).get()
+    
+    qs.docs.forEach(doc=>{
+      doc.ref.delete()
+    })
+
+    return logger.log('Se ha borrado una imagen compartida')
+  }
 })

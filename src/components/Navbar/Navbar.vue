@@ -6,7 +6,7 @@
 <template>
     <nav>
         <h3>
-            <img id="main-logo" :src="mainLogo" alt="main-logo">
+            <RouterLink to="/"><img id="main-logo" :src="mainLogo" alt="main-logo"></RouterLink>
         </h3>
         <NavbarMobile/>
     </nav>

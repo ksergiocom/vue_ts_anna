@@ -1,7 +1,6 @@
 <script setup lang="ts">
     import Image from '@/components/Image.vue'
-    import {ref, onMounted} from 'vue'
-    import {PhotosService} from '@/services/photos.service'
+    import {computed} from 'vue'
     import { Photo } from '@/types'
 
     // Necesario para este componente solo.
@@ -9,19 +8,16 @@
         cssClass:'v'|'h'|'h2'
     }
     
-    let miGrid = ref<HTMLDivElement>()
+    const props = defineProps<{
+        photos:Photo[]
+    }>()
 
-    const photos = ref<PhotoWithCSSClass[]>([])
+    const photosWithCSSClass = computed(():PhotoWithCSSClass[]=>{
 
-    onMounted(async () => {  
-        // SOLO PARA VALORES PARES!
-        const photosJSON = await PhotosService.getPublicPhotos(49)
-
-        //Para que me cuadren todas. La superficie total sumada debe ser multiplo de 6.  
         let v = 0
         let h = 0
         
-        photosJSON.forEach(photo=>{
+        props.photos.forEach((photo:Photo)=>{
             switch (photo.orientacion){
                 case 'vertical':
                     v++
@@ -62,6 +58,7 @@
             cantidadH = cantidadH - 4
         }
 
+
         console.table({
             h,
             v,
@@ -82,7 +79,7 @@
         let cantidadVDisponibles = v
         let cantidadHGrandesDisponibles = cantidadH2
         let cantidadHPequeñasDisponibles = cantidadH
-        const photosWithClasses = photosJSON.map((photo):PhotoWithCSSClass=>{
+        const photosWithClasses = props.photos.map((photo):PhotoWithCSSClass=>{
             if(photo.orientacion=='vertical'){
                 --cantidadVDisponibles
 
@@ -119,16 +116,34 @@
             }
         })
 
-        photos.value = photosWithClasses
-    })
+        
+        // Colocar los dos primeros siempre uno h y otro v para romper la simetria.
+        const photosMezcladas = photosWithClasses.sort(()=>Math.random() - 0.5)
+        
+        const idxH = photosMezcladas.findIndex(photo=>photo.cssClass=='h')
+        const photoH = photosMezcladas.splice(idxH,1)
+        
+        const idxV = photosMezcladas.findIndex(photo=>photo.cssClass=='v')
+        const photoV = photosMezcladas.splice(idxV,1)
 
+        const idxV2th = photosMezcladas.findIndex(photo=>photo.cssClass=='v')
+        const photoV2th = photosMezcladas.splice(idxV2th,1)
+
+        photosMezcladas.unshift(...photoV)
+        photosMezcladas.unshift(...photoH)
+        photosMezcladas.unshift(...photoV2th)
+
+
+        
+        return photosMezcladas
+    })
 
 
 </script>
 
 <template>
-    <div ref="miGrid" class="grid">
-        <div v-for="photo in photos" :class="['celda',photo.cssClass]" :key="photo.id">
+    <div class="grid">
+        <div v-for="photo in photosWithCSSClass" :class="['celda',photo.cssClass]" :key="photo.id">
             <Image :photo="photo"/>
         </div>
     </div>

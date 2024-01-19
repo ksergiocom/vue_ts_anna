@@ -1,0 +1,9 @@
+->Panel admin
+    ->Crear link
+    ->Crear Servicios
+    ->Crear componentes para el panel admin
+
+Separar rutas en distintas paginas
+Agregar estados
+Hacer lazy imports de las rutas y componentes
+Crear test

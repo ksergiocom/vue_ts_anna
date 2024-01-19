@@ -18,10 +18,12 @@
             <div v-show="showMenu" class="menu-body">
                 <img @click="toggleShowMenu(false)" class="close-menu-btn menu-btn" :src="CloseSVG"/>
                 <ul>
-                    <li><RouterLink @click="toggleShowMenu(false)" to="/">About me</RouterLink></li>
-                    <li><RouterLink @click="toggleShowMenu(false)" to="/">Portfolio</RouterLink></li>
-                    <li><RouterLink @click="toggleShowMenu(false)" to="/">Investment</RouterLink></li>
-                    <li><RouterLink @click="toggleShowMenu(false)" to="/admin">Contact</RouterLink></li>
+                    <li><RouterLink @click="toggleShowMenu(false)" to="/">Home</RouterLink></li>
+                    <li><RouterLink @click="toggleShowMenu(false)" to="/admin">Admin</RouterLink></li>
+                    <li><RouterLink @click="toggleShowMenu(false)" to="/contact">Contact</RouterLink></li>
+                    <li><RouterLink @click="toggleShowMenu(false)" to="/sign-in">Sign In</RouterLink></li>
+                    <li><RouterLink @click="toggleShowMenu(false)" to="/sign-out">Sign Out</RouterLink></li>
+                    <li><RouterLink @click="toggleShowMenu(false)" to="/shared/sergio@ksergio.com">Shared</RouterLink></li>
                 </ul>
             </div>
         </Transition>
@@ -53,6 +55,7 @@
     .menu-btn{
         height: 1.7rem;
         opacity: 70%;
+        cursor: pointer;
     }
 
     .close-menu-btn{
@@ -61,6 +64,7 @@
         top: 0;
         margin: 1.7rem 1rem;
         z-index: 10;
+        cursor: pointer;
     }
 
     .menu-body{
