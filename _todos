@@ -1,9 +1,10 @@
 ->Panel admin
-    ->Crear link
-    ->Crear Servicios
     ->Crear componentes para el panel admin
+    ->Crear aparatado para public_photos
+    ->Crear un contador para saber espacio disponible
 
 Separar rutas en distintas paginas
 Agregar estados
 Hacer lazy imports de las rutas y componentes
+Sacar los refs a los servicios
 Crear test
