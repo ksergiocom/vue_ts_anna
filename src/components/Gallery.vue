@@ -8,12 +8,14 @@
     interface PhotoWithCSSClass extends Photo {
         cssClass:'v'|'h'|'h2'
     }
+    
+    let miGrid = ref<HTMLDivElement>()
 
     const photos = ref<PhotoWithCSSClass[]>([])
 
     onMounted(async () => {  
         // SOLO PARA VALORES PARES!
-        const photosJSON = await PhotosService.getPublicPhotos(20)
+        const photosJSON = await PhotosService.getPublicPhotos(49)
 
         //Para que me cuadren todas. La superficie total sumada debe ser multiplo de 6.  
         let v = 0
@@ -77,13 +79,23 @@
             modulo6H:sParaHorizontales%6,
         })
 
+        let cantidadVDisponibles = v
         let cantidadHGrandesDisponibles = cantidadH2
         let cantidadHPequeñasDisponibles = cantidadH
         const photosWithClasses = photosJSON.map((photo):PhotoWithCSSClass=>{
             if(photo.orientacion=='vertical'){
-                return {
-                    ...photo,
-                    cssClass:'v',
+                --cantidadVDisponibles
+
+                if(cantidadVDisponibles){
+                    return {
+                        ...photo,
+                        cssClass:'v',
+                    }
+                }else{
+                    return {
+                        ...photo,
+                        cssClass:'h',
+                    }
                 }
             }
             if(photo.orientacion=='horizontal'){
@@ -115,15 +127,15 @@
 </script>
 
 <template>
-    <section>
+    <div ref="miGrid" class="grid">
         <div v-for="photo in photos" :class="['celda',photo.cssClass]" :key="photo.id">
             <Image :photo="photo"/>
         </div>
-    </section>
+    </div>
 </template>
 
 <style scoped>
-    section {
+    .grid {
         width: 100%;
         height: 100%;
         display: grid;
@@ -145,7 +157,10 @@
         display: flex;
         height: 100%;
         width: 100%;
+        grid-column-end: span auto;
+        grid-row-end: span auto;
     }
+   
 
     .h2{
         grid-column: span 2;
@@ -155,14 +170,5 @@
     .v{
         grid-row: span 2;
     }
-
-@media (min-width:900px) {
-    section{
-        grid-template-columns: repeat(3, 1fr); /* Dos columnas de igual ancho */
-        grid-auto-rows: calc(0.67 * (100vw / 3)); 
-    }
-
-
-}
 
 </style>
