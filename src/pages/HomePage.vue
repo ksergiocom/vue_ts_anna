@@ -1,5 +1,6 @@
 <script setup lang="ts">
     import Gallery from '@/components/Gallery.vue'
+
     import { onMounted, ref } from 'vue';
     import { PhotosService } from '@/services/photos.service';
     import { Photo } from '@/types';

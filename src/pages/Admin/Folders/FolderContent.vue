@@ -8,7 +8,6 @@
 
     onMounted(async ()=>{
         files.value = await StorageService.getFiles('/shared/'+folderName)
-        console.log(folderName)
     })
 
 </script>

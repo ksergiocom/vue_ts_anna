@@ -59,22 +59,22 @@
         }
 
 
-        console.table({
-            h,
-            v,
-            sParaHorizontales,
-            sParaVerticales,
-            sTotalMediaSiguienteMultiploDe6,
-            sParaV:v*2,
-            sParaH:cantidadH,
-            sParaH2Usada:cantidadH2*4,
-            sRestante:sTotalMediaSiguienteMultiploDe6-cantidadH2*4-cantidadH-sParaVerticales,
-            cantidadH,
-            cantidadH2,
-            cantidadV:v,
-            modulo6V:sParaVerticales%6,
-            modulo6H:sParaHorizontales%6,
-        })
+        // console.table({
+        //     h,
+        //     v,
+        //     sParaHorizontales,
+        //     sParaVerticales,
+        //     sTotalMediaSiguienteMultiploDe6,
+        //     sParaV:v*2,
+        //     sParaH:cantidadH,
+        //     sParaH2Usada:cantidadH2*4,
+        //     sRestante:sTotalMediaSiguienteMultiploDe6-cantidadH2*4-cantidadH-sParaVerticales,
+        //     cantidadH,
+        //     cantidadH2,
+        //     cantidadV:v,
+        //     modulo6V:sParaVerticales%6,
+        //     modulo6H:sParaHorizontales%6,
+        // })
 
         let cantidadVDisponibles = v
         let cantidadHGrandesDisponibles = cantidadH2
