@@ -12,7 +12,7 @@ import AdminLayout from '@/pages/Admin/AdminLayout.vue'
 import AdminUsersPage from '@/pages/Admin/UsersPage.vue'
 
 import AdminFolderLayout from '@/pages/Admin/Folders/FolderLayout.vue'
-import AdminFoldersPage from '@/pages/Admin/Folders/FoldersPage.vue'
+import AdminFoldersPage from '@/pages/Admin/Folders/FoldersPage/FoldersPage.vue'
 import AdminFolderContentPage from '@/pages/Admin/Folders/FolderContent.vue'
 
 const routes = [

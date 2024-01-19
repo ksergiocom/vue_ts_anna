@@ -1,4 +1,4 @@
-import { getStorage, ref, listAll } from "firebase/storage";
+import { getStorage, ref, listAll , uploadString} from "firebase/storage";
 import {app} from '@/firebase'
 
 const storage = getStorage(app);
@@ -19,9 +19,16 @@ class StorageService {
         const listRef = ref(storage,path)
 
         const res = await listAll(listRef)
-        const files = res.items.map(file=>file.name)
+        let files = res.items.map(file=>file.name)
+        files = files.filter(file=>file!=='.gf')
         
         return files
+    }
+
+    public static async createFolder(path:string){
+        const newFolderRef = ref(storage, path+'/.gf')
+        await uploadString(newFolderRef,'Este archivo es un GhostFile para crear una carpeta :)')
+        return true
     }
 
 

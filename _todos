@@ -3,6 +3,8 @@
     ->Crear aparatado para public_photos
     ->Crear un contador para saber espacio disponible
 
+Agregar snackbars alert Pinia
+Agregar Estado auth con Pinia
 Separar rutas en distintas paginas
 Agregar estados
 Hacer lazy imports de las rutas y componentes
