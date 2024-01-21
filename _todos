@@ -1,8 +1,11 @@
-->Panel admin
-    ->Crear componentes para el panel admin
-    ->Crear aparatado para public_photos
-    ->Crear un contador para saber espacio disponible
+Haciendo:
 
+->Creando servicios de folders.
+
+Pendientes:
+
+->Crear un contador para saber espacio disponible
+->Crear aparatado para public_photos
 Agregar snackbars alert Pinia
 Agregar Estado auth con Pinia
 Separar rutas en distintas paginas
@@ -10,3 +13,7 @@ Agregar estados
 Hacer lazy imports de las rutas y componentes
 Sacar los refs a los servicios
 Crear test
+
+Hechos:
+
+->Crear componentes para el panel admin

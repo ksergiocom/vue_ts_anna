@@ -7,8 +7,9 @@
     let folderName = ref('')
     
     const crearFolder = async () => {
-        StorageService.createFolder('shared/'+folderName.value)
-        alert(folderName.value)
+        const wasCreated = await StorageService.createFolder('shared/'+folderName.value)
+        if(!wasCreated) return alert('Ya existe!')
+        alert('Creada '+folderName.value)
         emit('created')
     }
 </script>
