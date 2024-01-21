@@ -1,5 +1,5 @@
-import { getStorage, ref, listAll , uploadString} from "firebase/storage";
-import { doc, setDoc, getDoc } from 'firebase/firestore'
+import { getStorage, ref, listAll , uploadString, deleteObject, uploadBytes } from "firebase/storage";
+import { doc, setDoc, getDoc, deleteDoc } from 'firebase/firestore'
 
 import {app, db} from '@/firebase'
 
@@ -28,6 +28,12 @@ class StorageService {
     }
 
     public static async createFolder(path:string){
+        // Validar que el nombre de la carpeta no contenga espacios en blanco
+        if (/\s/.test(path)) {
+            console.error("El nombre de la carpeta no puede contener espacios en blanco.");
+            return false;
+        }
+
         // Comprobar si no existe una carpeta con ese nombre
         const docSnapshot = await getDoc(doc(db,path))
         if(docSnapshot.exists()) return false
@@ -45,24 +51,72 @@ class StorageService {
         return true
     }
 
+    public static async deleteFolder(path:string){
+        // Verificar si la carpeta existe en Firestore
+        const docSnapshot = await getDoc(doc(db, path));
+        if (!docSnapshot.exists()) {
+            console.error(`La carpeta ${path} no existe.`);
+            return false;
+        }
 
-    // public static async uploadPublicPhoto(files:FileList){
-    //     const storage = getStorage()
+        // Eliminar la carpeta en Firestore
+        await deleteDoc(doc(db, path));
 
-    //     const promises = []
+        // Eliminar todos los archivos en Storage dentro de la carpeta
+        const storageRef = ref(storage, path);
+        const filesInFolder = await listAll(storageRef);
 
-    //     Array.from(files).forEach(file=> {
-    //         const originalFileName = file.name
-    //         const photoFileRef = ref(storage, 'public_photos/'+originalFileName)
-    //         const promise = uploadBytes(photoFileRef, file)
-    //         console.log(originalFileName)
+        // Eliminar cada archivo en la carpeta
+        const deleteFilePromises = filesInFolder.items.map(async (fileRef) => {
+            await deleteObject(fileRef);
+        });
 
-    //         promises.push(promise)
-    //     })
+        // Esperar a que se completen todas las eliminaciones de archivos
+        await Promise.all(deleteFilePromises);
 
-    //     await Promise.all(files)
-    //     console.log('Uploaded successfully!')
-    // }
+        console.log(`Carpeta ${path} y sus archivos eliminados exitosamente.`);
+        return true;
+    }
+
+
+    public static async uploadFiles(folderPath: string, files: FileList) {
+        // Verificar si la carpeta existe en Firestore
+        const docSnapshot = await getDoc(doc(db, folderPath));
+        if (!docSnapshot.exists()) {
+            console.error(`La carpeta ${folderPath} no existe.`);
+            return false;
+        }
+
+        // Subir cada archivo al folder en Storage
+        const uploadFilePromises = Array.from(files).map(async (file) => {
+            const fileName = file.name;
+            const filePath = `${folderPath}/${fileName}`;
+            const fileRef = ref(storage, filePath);
+
+            try {
+                await uploadBytes(fileRef, file);
+                console.log(`Archivo ${fileName} subido exitosamente a ${folderPath}`);
+            } catch (error) {
+                console.error(`Error al subir el archivo ${fileName}:`, error);
+            }
+        });
+
+        // Esperar a que se completen todas las subidas de archivos
+        await Promise.all(uploadFilePromises);
+
+        return true;
+    }
+
+    public static async deleteFile(filePath: string): Promise<boolean> {
+        console.log({filePath})
+
+        // Eliminar el archivo en Storage con las Cloud Funcions se borra automaticamente en firestore.
+        const storageRef = ref(getStorage(), filePath);
+        await deleteObject(storageRef);
+
+        console.log(`Archivo ${filePath} eliminado exitosamente.`);
+        return true;
+    }
 
 }
 

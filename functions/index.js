@@ -58,7 +58,7 @@ exports.resizeImagen = onObjectFinalized({
       urlPublica: url, // URL para servir en el frontend
     }
   
-    await db.collection('shared').doc(folderName).collection('photos').add(datosFirestore)
+    await db.collection('shared').doc(folderName).collection('files').doc(path.basename(filePath)).set(datosFirestore)
     return logger.log('Se ha guardado una imagen para compartir')
   }
 
@@ -140,7 +140,7 @@ exports.deleteImage = onObjectDeleted({ cpu: 2, region: 'europe-west3' },async e
   if(filePath.startsWith('shared/')){
     const folderName = filePath.split('/')[1]
 
-    const qs = await db.collection('shared').doc(folderName).collection('photos').where("filePath","==",filePath).get()
+    const qs = await db.collection('shared').doc(folderName).collection('files').where("filePath","==",filePath).get()
     
     qs.docs.forEach(doc=>{
       doc.ref.delete()

@@ -1,6 +1,7 @@
 Haciendo:
 
 ->Creando servicios de folders.
+->Cloud functions para cuando se crean folders desde firebase panel. Se tiene que guardar la referencia en firestore de las carpetas y creaer el archivo .gf
 
 Pendientes:
 
