@@ -9,12 +9,15 @@
         photo: Photo;
     }>();
 
-
+    const handleClick = () => {
+        const url = props.photo.urlPublica // Reemplaza con tu URL
+        window.open(url, '_blank');
+    }
 
 </script>
 
 <template>
-    <div>
+    <div @click="handleClick">
         <img ref="imgTag" class="hidden image" v-lazy="{
             src:props.photo.urlPublica,
             loading:MainLogo,
