@@ -1,5 +1,5 @@
 import { getStorage, ref, listAll , uploadString, deleteObject, uploadBytes } from "firebase/storage";
-import { doc, setDoc, getDoc, deleteDoc } from 'firebase/firestore'
+import { doc, setDoc, getDoc, deleteDoc, updateDoc } from 'firebase/firestore'
 
 import {app, db} from '@/firebase'
 
@@ -116,6 +116,16 @@ class StorageService {
 
         console.log(`Archivo ${filePath} eliminado exitosamente.`);
         return true;
+    }
+
+    // Funcion para setear unos usuarios autorizados en Firestore
+    // Estos se utiliza con las rules del storage para el acceso
+    public static async setAuthorizedUsers(sharedFolderName:string, usersIds: string[]): Promise<boolean> {
+        await updateDoc(doc(db, `shared/${sharedFolderName}`), {
+            authorizedUserId:usersIds
+        })
+        console.log('Se han actualiazado los usarios autorizados')
+        return true
     }
 
 }

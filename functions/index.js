@@ -1,6 +1,7 @@
 const { onObjectFinalized, onObjectDeleted } = require("firebase-functions/v2/storage");
 const { getStorage , getDownloadURL} = require("firebase-admin/storage");
-// const { nanoid } = require("nanoid");
+
+const functionsv1 = require('firebase-functions');
 const logger = require("firebase-functions/logger");
 const path = require('path')
 const {FieldValue} = require('firebase-admin/firestore')
@@ -36,7 +37,6 @@ exports.resizeImagen = onObjectFinalized({
   // Aqui las imagenes SHARED
   if(filePath.startsWith('shared/')){
     const bucket = getStorage().bucket(fileBucket);
-    const url = await getDownloadURL(bucket.file(filePath))
     const downloadResponse = await bucket.file(filePath).download();
     const imageBuffer = downloadResponse[0];
 
@@ -55,13 +55,14 @@ exports.resizeImagen = onObjectFinalized({
       pesoOriginal: imageBuffer.length, // Tamaño en bytes del archivo original
       // pesoNuevo: thumbnailBuffer.length, // Tamaño en bytes de la miniatura
       fechaSubida: FieldValue.serverTimestamp(),
-      urlPublica: url, // URL para servir en el frontend
     }
   
     await db.collection('shared').doc(folderName).collection('files').doc(path.basename(filePath)).set(datosFirestore)
     return logger.log('Se ha guardado una imagen para compartir')
   }
 
+
+  // IMAGENES PUBLIC PHOTOS _____________________________
 
   // Solo las fotos que van a public tienen que ser redimensinoadas. El resto van RAW tal cual se suben
   if(!filePath.startsWith('public_photos/')){
@@ -148,4 +149,19 @@ exports.deleteImage = onObjectDeleted({ cpu: 2, region: 'europe-west3' },async e
 
     return logger.log('Se ha borrado una imagen compartida')
   }
+})
+
+
+exports.saveUserToFirestore = functionsv1.auth.user().onCreate(async user=>{
+  logger.log(user)
+  await db.collection('users').doc(user.uid).set({
+    email: user.email,
+    fechaRegistro: FieldValue.serverTimestamp(), 
+    admin: false,
+  })
+})
+
+exports.deleteUserFromFirestore = functionsv1.auth.user().onDelete(async user=>{
+  logger.log(user)
+  await db.collection('users').doc(user.uid).delete()
 })

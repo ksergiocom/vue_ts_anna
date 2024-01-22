@@ -1,21 +1,18 @@
 <script setup lang="ts">
     import { ref, onMounted } from 'vue'
-    import { useRoute } from 'vue-router'
     import {PhotosService} from '@/services/photos.service'
-    import { Photo } from '@/types';
-    import Gallery from '@/components/Gallery.vue';
+    // import Gallery from '@/components/Gallery.vue';
+    import {auth} from '@/firebase'
 
-    const id = useRoute().params.id as string
-    const photos = ref<Photo[]>([])
-    // const router = useRouter()
+    const photosBlob= ref<Blob[]>([])
 
     onMounted(async ()=>{
         try {
-            photos.value = await PhotosService.getSharedPhotos(id)
-            if(photos.value.length<1){
-                alert('No se han encontrado fotos. Ver SharedPage')
-            }
-            
+            const uid = auth.currentUser?.uid
+            console.log({uid})
+            if(!uid) throw Error('No hay usuario logeado')
+            photosBlob.value = await PhotosService.getSharedPhotosBlobs(uid)
+            console.log(photosBlob.value)
         } catch (error) {
             console.error({error})
             alert('Ha ocurrido un error en SharedPage')
@@ -25,5 +22,6 @@
 </script>
 
 <template>
-    <Gallery :photos="photos"/>
+    <!-- <Gallery :photos="photos"/> -->
+    <p>Testing</p>
 </template>

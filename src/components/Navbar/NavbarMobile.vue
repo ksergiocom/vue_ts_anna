@@ -23,7 +23,7 @@
                     <li><RouterLink @click="toggleShowMenu(false)" to="/contact">Contact</RouterLink></li>
                     <li><RouterLink @click="toggleShowMenu(false)" to="/sign-in">Sign In</RouterLink></li>
                     <li><RouterLink @click="toggleShowMenu(false)" to="/sign-out">Sign Out</RouterLink></li>
-                    <li><RouterLink @click="toggleShowMenu(false)" to="/shared/sergio@ksergio.com">Shared</RouterLink></li>
+                    <li><RouterLink @click="toggleShowMenu(false)" to="/shared">Shared</RouterLink></li>
                 </ul>
             </div>
         </Transition>

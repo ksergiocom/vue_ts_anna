@@ -9,7 +9,7 @@ import SignInPage from '@/pages/Auth/SignInPage.vue'
 import SignOutPage from '@/pages/Auth/SignOutPage.vue'
 
 import AdminLayout from '@/pages/Admin/AdminLayout.vue'
-import AdminUsersPage from '@/pages/Admin/UsersPage.vue'
+import AdminUsersPage from '@/pages/Admin/Users/UsersPage.vue'
 
 import AdminFolderLayout from '@/pages/Admin/Folders/FolderLayout.vue'
 import AdminFoldersPage from '@/pages/Admin/Folders/FoldersPage/FoldersPage.vue'
@@ -41,7 +41,7 @@ const routes = [
     },
     {path:'/contact', component: ContactPage},
     {
-        path:'/shared/:id',
+        path:'/shared',
         component: SharedPage,
         beforeEnter: (_to:any, _from:any) => {
             const user = auth.currentUser

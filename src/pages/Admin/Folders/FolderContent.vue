@@ -1,8 +1,10 @@
 <script setup lang="ts">
     import { ref, onMounted } from 'vue';
+    import {AuthService} from '@/services/auth.service'
     import {StorageService} from '@/services/storage.service'
     import { useRoute, useRouter } from 'vue-router';
 
+    const users = ref()
     const files = ref<String[]>([])
     const uploadedFiles = ref<FileList|null>()
 
@@ -10,6 +12,7 @@
     const folderName = useRoute().params.folderName as string
 
     onMounted(async ()=>{
+        users.value = await AuthService.getUsers()
         files.value = await StorageService.getFiles('/shared/'+folderName)
     })
 
@@ -47,7 +50,6 @@
         <form @submit.prevent="handleUploadFiles">
             <input type="file" multiple @change="handleFileSelection">
         </form>
-        <input type="text">
         <ul>
             <li v-for="file in files">
                 <span>{{ file }}</span>

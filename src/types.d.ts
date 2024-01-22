@@ -11,5 +11,12 @@ export type Photo = {
     pesoNuevo: number
     fechaSubida: FieldValue
     borrada: boolean
-    urlPublica: string
+    urlPublica?: string
+}
+
+
+export interface UserData {
+    id:string;
+    fechaRegistro:Date;
+    email:string;
 }
