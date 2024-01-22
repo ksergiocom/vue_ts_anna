@@ -2,12 +2,15 @@
     import MenuSVG from '@/assets/img/menu.svg'
     import CloseSVG from '@/assets/img/close.svg'
     import {ref} from 'vue'
+    import {useCurrentUser} from 'vuefire'
 
     let showMenu = ref(false)
 
     const toggleShowMenu = (shouldShow:boolean) =>{
         showMenu.value = shouldShow
     }
+
+    const user = useCurrentUser()
 
 </script>
 
@@ -19,10 +22,10 @@
                 <img @click="toggleShowMenu(false)" class="close-menu-btn menu-btn" :src="CloseSVG"/>
                 <ul>
                     <li><RouterLink @click="toggleShowMenu(false)" to="/">Home</RouterLink></li>
-                    <li><RouterLink @click="toggleShowMenu(false)" to="/admin">Admin</RouterLink></li>
+                    <li v-if="user?.admin"><RouterLink @click="toggleShowMenu(false)" to="/admin">Admin</RouterLink></li>
                     <li><RouterLink @click="toggleShowMenu(false)" to="/contact">Contact</RouterLink></li>
-                    <li><RouterLink @click="toggleShowMenu(false)" to="/sign-in">Sign In</RouterLink></li>
-                    <li><RouterLink @click="toggleShowMenu(false)" to="/sign-out">Sign Out</RouterLink></li>
+                    <li v-if="!user"><RouterLink @click="toggleShowMenu(false)" to="/sign-in">Sign In</RouterLink></li>
+                    <li v-if="user"><RouterLink @click="toggleShowMenu(false)" to="/sign-out">Sign Out</RouterLink></li>
                     <li><RouterLink @click="toggleShowMenu(false)" to="/shared">Shared</RouterLink></li>
                 </ul>
             </div>

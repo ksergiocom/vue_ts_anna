@@ -1,8 +1,10 @@
 Haciendo:
 -> Refactor con Vuefire
 
+
 Pendientes:
 
+-> Refactor Modales
 -> Magic link para auth
 -> Refactor usuarios carpetas autorizodos
 -> Navbar dejar ver admin solo a users que sean admin

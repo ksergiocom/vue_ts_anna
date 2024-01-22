@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { auth } from '@/firebase'
+import { getCurrentUser } from 'vuefire'
 
 import HomePage from './../pages/HomePage.vue'
 import ContactPage from '@/pages/ContactPage.vue'
@@ -20,6 +21,11 @@ const routes = [
     {
         path:'/admin',
         component: AdminLayout,
+        beforeEnter: async (_to:any, _from:any) => {
+            const user = await getCurrentUser() as any
+            if(!user?.admin) return '/'
+            return true
+        },
         children:[
             {path:'', redirect:'/admin/folders'},
             {
@@ -43,8 +49,8 @@ const routes = [
     {
         path:'/shared',
         component: SharedPage,
-        beforeEnter: (_to:any, _from:any) => {
-            const user = auth.currentUser
+        beforeEnter: async (_to:any, _from:any) => {
+            const user = await getCurrentUser()
             if(!user) return '/sign-in'
             return true
         },
@@ -52,8 +58,8 @@ const routes = [
     {
         path:'/sign-in',
         component: SignInPage,
-        beforeEnter: (_to:any, _from:any) => {
-            const user = auth.currentUser
+        beforeEnter: async (_to:any, _from:any) => {
+            const user = await getCurrentUser()
             if(user) return '/'
             return true
         },

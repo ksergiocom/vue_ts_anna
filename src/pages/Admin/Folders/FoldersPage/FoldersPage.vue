@@ -1,25 +1,12 @@
 <script setup lang="ts">
-    import { ref, onMounted } from 'vue';
-    import {StorageService} from '@/services/storage.service'
+    import { ref } from 'vue';
+    import { sharedCollection } from '@/firebase'
+    import { useCollection} from 'vuefire'
     import Modal from '@/components/UI/Modal.vue'
     import CrearFolderModal from './CrearFolderModal.vue';
 
-    const folders = ref<String[]>([])
+    const folders = useCollection(sharedCollection)
     const showModal = ref(false)
-
-    const fetchFolders = async () => {
-        folders.value = await StorageService.getFolders('shared')
-    }
-
-    onMounted(async ()=>{
-        await fetchFolders()
-    })
-
-    const handleCreatedFolder = async () => {
-        showModal.value = false
-        await fetchFolders()
-
-    }
 
 </script>
 
@@ -34,14 +21,14 @@
             <tbody>
                 <tr v-for="folder in folders">
                     <td>
-                        <RouterLink :to="`/admin/folders/${folder}`">{{ folder }}</RouterLink>
+                        <RouterLink :to="`/admin/folders/${folder.id}`">{{ folder.id }}</RouterLink>
                     </td>
                 </tr>
             </tbody>
         </table>
 
         <Modal v-show="showModal" @close="showModal=false">
-            <CrearFolderModal @created="handleCreatedFolder"/>
+            <CrearFolderModal @created="showModal=false"/>
         </Modal>
     </div>
 </template>

@@ -1,27 +1,14 @@
 <script setup lang="ts">
 import Modal from '@/components/UI/Modal.vue'
-import { AuthService } from '@/services/auth.service'
-import {ref, onMounted} from 'vue'
+import { usersCollection } from '@/firebase'
+import { useCollection } from 'vuefire'
+import {ref} from 'vue'
 import { UserData } from '@/types'
 
 import CreateUser from './Modals/CreateUser.vue'
 
 let showCreateModal = ref(false) 
-const users = ref<UserData[]>([])
-
-const getUsers = async () => {
-    users.value = await AuthService.getUsers()
-    console.log(users.value)
-}
-
-const userCreated = async () => {
-    showCreateModal.value = false
-    await getUsers()
-}
-
-onMounted(async () => {
-    await getUsers()
-})
+const users = useCollection<UserData[]>(usersCollection)
 
 </script>
 
@@ -41,7 +28,7 @@ onMounted(async () => {
         </table>
 
         <Modal v-if="showCreateModal" @close="showCreateModal=false">
-            <CreateUser @created="userCreated" />
+            <CreateUser @created="showCreateModal=false"/>
         </Modal>
     </div>
 </template>

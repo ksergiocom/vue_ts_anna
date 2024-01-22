@@ -1,5 +1,7 @@
 <script setup lang="ts">
     import { ref, onMounted } from 'vue';
+    import { usersCollection } from '@/firebase';
+    import { useCollection} from 'vuefire'
     import {AuthService} from '@/services/auth.service'
     import {StorageService} from '@/services/storage.service'
     import { useRoute, useRouter } from 'vue-router';
@@ -9,7 +11,7 @@
 
     import { UserData } from '@/types';
 
-    const users = ref()
+    const users = useCollection<UserData[]>(usersCollection)
     const files = ref<String[]>([])
     const uploadedFiles = ref<FileList|null>()
     const showAuthorizedUsersModal = ref(false)
@@ -19,7 +21,6 @@
     const folderName = useRoute().params.folderName as string
 
     onMounted(async ()=>{
-        users.value = await AuthService.getUsers()
         authorizedUsers.value = await AuthService.getAuthorizedUsers(folderName)
         files.value = await StorageService.getFiles('/shared/'+folderName)
     })
@@ -70,7 +71,7 @@
         <ul>
             <li v-for="file in files">
                 <span>{{ file }}</span>
-                <button @click="handleDeleteFile(file as string)">Delete</button>
+                <button class="danger" @click="handleDeleteFile(file as string)">Delete</button>
             </li>
         </ul>
         <Modal v-if="showAuthorizedUsersModal==true" @close="showAuthorizedUsersModal=false">

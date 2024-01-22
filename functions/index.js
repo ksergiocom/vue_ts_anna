@@ -271,3 +271,34 @@ exports.firestoreDeletedPublicDocument = onDocumentDeleted({
   return null;
 }
 )
+
+
+exports.updateAdminClaim = functionsv1.firestore
+  .document('users/{userId}')
+  .onUpdate(async (change, context) => {
+    const userId = context.params.userId;
+    const newValue = change.after.data().admin;
+    const previousValue = change.before.data().admin;
+
+    // Verifica si el campo admin ha cambiado
+    if (newValue !== previousValue) {
+      try {
+        const user = await admin.auth().getUser(userId);
+
+        // Agregar o quitar el custom claim según el valor del campo admin
+        if (newValue) {
+          await admin.auth().setCustomUserClaims(userId, { admin: true });
+        } else {
+          await admin.auth().setCustomUserClaims(userId, { admin: false });
+        }
+
+        logger.log(`Custom claim 'admin' actualizado para el usuario ${userId}.`);
+        return null;
+      } catch (error) {
+        logger.error('Error al actualizar el custom claim:', error);
+        return null;
+      }
+    }
+
+    return null;
+  });

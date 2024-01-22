@@ -1,6 +1,8 @@
 <script setup lang="ts">
     import mainLogo from "@/assets/img/main-logo.jpg";
     import NavbarMobile from "./NavbarMobile.vue";
+    import {useCurrentUser} from 'vuefire'
+    const user = useCurrentUser()
 </script>
 
 <template>
@@ -8,7 +10,13 @@
         <h3>
             <RouterLink to="/"><img id="main-logo" :src="mainLogo" alt="main-logo"></RouterLink>
         </h3>
-        <NavbarMobile/>
+        <div class="right">
+            <span>
+                {{ user?.email }}
+                {{ user?.admin }}
+            </span>
+            <NavbarMobile/>
+        </div>
     </nav>
 </template>
 
@@ -31,6 +39,10 @@
     
     #main-logo{
         height: 3rem;
+    }
+
+    .right{
+        display: flex;
     }
 
 </style>
