@@ -1,7 +1,6 @@
 Haciendo:
 -> Cloud functions
     -> Cuando se borra del storage se tiene que borrar del firestore
-    -> Cuando se borra un usuario borrar tambien todos los autorizedUserId
     -> Si se borra un documento de firestore se tiene que borrar tambien el folder en storage
 
 Pendientes:
@@ -26,6 +25,7 @@ Crear test
 
 Hechos:
 
+-> Cuando se borra un usuario borrar tambien todos los autorizedUserId
 ->Crear componentes para el panel admin
 ->Creando servicios de folders.
 -> Asignar usuarios a carpetas

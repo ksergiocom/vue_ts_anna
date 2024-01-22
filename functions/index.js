@@ -147,6 +147,16 @@ exports.deleteImage = onObjectDeleted({ cpu: 2, region: 'europe-west3' },async e
       doc.ref.delete()
     })
 
+    // Verificar si la carpeta está vacía después de eliminar la imagen
+    const [files] = await storage.bucket(object.bucket).getFiles({ prefix: `shared/${folderName}/` });
+
+    if (files.length === 0) {
+      // Si la carpeta está vacía, eliminar el registro de Firestore
+      await db.collection('shared').doc(folderName).delete();
+      logger.log('Carpeta compartida vacía eliminada de Firestore');
+    }
+
+
     return logger.log('Se ha borrado una imagen compartida')
   }
 })
