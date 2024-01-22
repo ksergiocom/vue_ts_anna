@@ -5,7 +5,6 @@
 <template>
     <main>
         <h2>Admin Panel</h2>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur, voluptatibus!</p>
         <nav>
             <ul>
                 <li><RouterLink to="/admin/folders">Folders</RouterLink></li>

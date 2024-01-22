@@ -18,6 +18,7 @@ export type Photo = {
 export interface UserData {
     id:string;
     fechaRegistro:Date;
+    admin: boolean;
     email:string;
 }
 

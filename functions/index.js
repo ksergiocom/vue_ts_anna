@@ -232,3 +232,42 @@ exports.userDeletedFromFirestore = onDocumentDeleted({
       return null;
   }
 )
+
+
+
+// No funcionaba correctamente. Creo que no se llega a ejecutar!
+exports.firestoreDeletedSharedDocument = onDocumentDeleted({
+  region: 'europe-west3',
+  document: 'shared/{folderName}/files/{fileName}'
+}, async event => {
+  const folderName = event.params.folderName
+  const fileName = event.params.fileName
+
+  logger.log({folderName,fileName})
+
+  const file = await admin.storage.bucket().file(`shared/${folderName}/${fileName}`)
+  
+  await file.delete()
+
+  console.log('Se ha eliminado un registro de firestore, tambien se ha eliminado el archivo en el storage.');
+  return null;
+}
+)
+
+
+// No funcionaba correctamente. Creo que no se llega a ejecutar!
+exports.firestoreDeletedPublicDocument = onDocumentDeleted({
+  region: 'europe-west3',
+  document: 'public_photos/{folderName}/files/{fileName}'
+}, async event => {
+  const folderName = event.params.folderName
+  const fileName = event.params.fileName
+
+  const file = await admin.storage.bucket().file(`public_photos/${folderName}/${fileName}`)
+  
+  await file.delete()
+
+  console.log('Se ha eliminado un registro de firestore, tambien se ha eliminado el archivo en el storage.');
+  return null;
+}
+)

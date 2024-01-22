@@ -1,10 +1,9 @@
 Haciendo:
--> Cloud functions
-    -> Cuando se borra del storage se tiene que borrar del firestore
-    -> Si se borra un documento de firestore se tiene que borrar tambien el folder en storage
+-> Refactor con Vuefire
 
 Pendientes:
 
+-> Magic link para auth
 -> Refactor usuarios carpetas autorizodos
 -> Navbar dejar ver admin solo a users que sean admin
 ->Agregar Loders
@@ -21,10 +20,14 @@ Agregar estados
 Hacer lazy imports de las rutas y componentes
 Sacar los refs a los servicios
 Crear test
--> Refactor con Vuefire
+
+No me fucnionan las cloud functions! -> Si se borra un documento de firestore se tiene que borrar tambien el folder en storage
 
 Hechos:
 
+-> Algunos estilos
+-> Confirm deletion folders and users
+-> Cuando se borra del storage se tiene que borrar del firestore
 -> Cuando se borra un usuario borrar tambien todos los autorizedUserId
 ->Crear componentes para el panel admin
 ->Creando servicios de folders.

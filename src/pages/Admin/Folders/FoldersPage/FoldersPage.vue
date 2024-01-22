@@ -27,11 +27,18 @@
     <div>
         <h3>Folders page</h3>
         <button @click="showModal=true">Crear folder</button>
-        <ul>
-            <li v-for="folder in folders">
-                <RouterLink :to="`/admin/folders/${folder}`">{{ folder }}</RouterLink>
-            </li>
-        </ul>
+        <table>
+            <thead>
+                <th>Folder name</th>
+            </thead>
+            <tbody>
+                <tr v-for="folder in folders">
+                    <td>
+                        <RouterLink :to="`/admin/folders/${folder}`">{{ folder }}</RouterLink>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
 
         <Modal v-show="showModal" @close="showModal=false">
             <CrearFolderModal @created="handleCreatedFolder"/>

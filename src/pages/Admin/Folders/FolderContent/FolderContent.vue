@@ -25,6 +25,7 @@
     })
 
     const handleDeleteFolder = async () => {
+        if(!confirm('Are you sure?')) return false
         await StorageService.deleteFolder(`shared/${folderName}`)
         router.push('/admin/folders')
     }
@@ -44,6 +45,7 @@
     }
 
     const handleDeleteFile = async (fileName: string) => {
+        if(!confirm('Are you sure?')) return false
         await StorageService.deleteFile(`shared/${folderName}/${fileName}`)
         // Actualizar la lista de archivos después de eliminar un archivo
         files.value = await StorageService.getFiles('/shared/' + folderName)
@@ -60,7 +62,7 @@
 <template>
     <div>
         <h3>Folder: {{ folderName }}</h3>
-        <button @click="handleDeleteFolder">Delete this folder</button>
+        <button class="danger" @click="handleDeleteFolder">Delete this folder</button>
         <button @click="showAuthorizedUsersModal=true">Set users</button>
         <form @submit.prevent="handleUploadFiles">
             <input type="file" multiple @change="handleFileSelection">

@@ -20,6 +20,7 @@ class AuthService {
             users.push({
                 id: doc.id,
                 email: doc.data().email,
+                admin: doc.data().admin,
                 fechaRegistro: doc.data().fechaRegistro,
             })
         })
@@ -48,6 +49,7 @@ class AuthService {
                 users.push({
                     id:user.id,
                     email:user.data()?.email,
+                    admin: user.data()?.admin,
                     fechaRegistro:user.data()?.fechaRegistro,
                 })
             }
