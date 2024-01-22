@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app"
 import { collection, getFirestore } from 'firebase/firestore'
-import { getAuth,onAuthStateChanged } from 'firebase/auth'
+import { getAuth } from 'firebase/auth'
 
 
 const firebaseConfig = {
@@ -20,14 +20,6 @@ const auth = getAuth(app)
 const public_photosCollection = collection(db, 'public_photos')
 const usersCollection = collection(db, 'users')
 const sharedCollection = collection(db, 'shared')
-
-onAuthStateChanged(auth, (user) => {
-  if(user){
-    console.log('User signed in!')
-  }else{
-    console.log('User signed out!')
-  }
-})
 
 export {
   db,

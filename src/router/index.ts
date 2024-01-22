@@ -23,7 +23,8 @@ const routes = [
         component: AdminLayout,
         beforeEnter: async (_to:any, _from:any) => {
             const user = await getCurrentUser() as any
-            if(!user?.admin) return '/'
+            const token = await user.getIdTokenResult()
+            if(!token.claims.admin) return '/'
             return true
         },
         children:[
