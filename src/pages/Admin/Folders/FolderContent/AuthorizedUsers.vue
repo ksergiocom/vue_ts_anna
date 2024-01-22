@@ -6,22 +6,23 @@
     const props = defineProps<{
         users:UserData[]
         folderName:string
+        authorizedUsers:UserData[]
     }>()
 
     const emits = defineEmits(['updated'])
     
     let select = ref<null|UserData>()
-    let authorizedUsers = ref<UserData[]>([])
+    let newAuthorizedUsers = ref<UserData[]>([])
 
     const handleChange = () => {
-        if(select.value == null) authorizedUsers.value = []
+        if(select.value == null) newAuthorizedUsers.value = []
         if(select.value){
-            authorizedUsers.value.push(select.value)
+            newAuthorizedUsers.value.push(select.value)
         }
     }
 
     const updateAuthorizedUsers = async () => {
-        const authorizedUsersId = authorizedUsers.value.map(user=>user.id)
+        const authorizedUsersId = newAuthorizedUsers.value.map(user=>user.id)
         await AuthService.asignarUsuariosACarpeta(props.folderName, authorizedUsersId)
         emits('updated')
     }
@@ -31,13 +32,19 @@
 
 <template>
     <div>
+        <section>
+            <h2>Authorized users:</h2>
+            <ul>
+                <li v-for="user in props.authorizedUsers" :key="user.id">{{ user.email }}</li>
+            </ul>
+        </section>
         <select v-model="select" name="user" @change="handleChange">
             <option :value="null">-- Clear all --</option>
             <option v-for="user in props.users" :value="user" :key="user.id">{{ user.email }}</option>
         </select>
-        <h3>Authorized Users:</h3>
+        <h3>Selected users:</h3>
         <ul>
-            <li v-for="user in authorizedUsers" :key="user.id">{{ user.email }}</li>
+            <li v-for="user in newAuthorizedUsers" :key="user.id">{{ user.email }}</li>
         </ul>
         <button @click="updateAuthorizedUsers">Confirm</button>
     </div>

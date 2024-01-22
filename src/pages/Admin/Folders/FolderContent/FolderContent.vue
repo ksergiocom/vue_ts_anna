@@ -7,16 +7,20 @@
     import AuthorizedUsers from './AuthorizedUsers.vue';
     import Modal from '@/components/UI/Modal.vue';
 
+    import { UserData } from '@/types';
+
     const users = ref()
     const files = ref<String[]>([])
     const uploadedFiles = ref<FileList|null>()
     const showAuthorizedUsersModal = ref(false)
+    const authorizedUsers = ref<UserData[]>([])
 
     const router = useRouter()
     const folderName = useRoute().params.folderName as string
 
     onMounted(async ()=>{
         users.value = await AuthService.getUsers()
+        authorizedUsers.value = await AuthService.getAuthorizedUsers(folderName)
         files.value = await StorageService.getFiles('/shared/'+folderName)
     })
 
@@ -45,8 +49,9 @@
         files.value = await StorageService.getFiles('/shared/' + folderName)
     }
 
-    const handleUpdatedAuthorizedUsers = () => {
+    const handleUpdatedAuthorizedUsers = async () => {
         showAuthorizedUsersModal.value = false
+        authorizedUsers.value = await AuthService.getAuthorizedUsers(folderName)
         alert('Se han actualizado los usarios autorizados')
     }
 
@@ -67,7 +72,7 @@
             </li>
         </ul>
         <Modal v-if="showAuthorizedUsersModal==true" @close="showAuthorizedUsersModal=false">
-            <AuthorizedUsers :users="users" :folderName="folderName" @updated="handleUpdatedAuthorizedUsers"/>
+            <AuthorizedUsers :users="users" :authorizedUsers="authorizedUsers" :folderName="folderName" @updated="handleUpdatedAuthorizedUsers"/>
         </Modal>
     </div>
 </template>

@@ -1,8 +1,11 @@
 Haciendo:
--> Asignar usuarios a carpetas
+-> Cloud functions
+    -> Cuando se borra un usuario borrar tambien todos los autorizedUserId
+    -> Si se borra un documento de firestore se tiene que borrar tambien el folder en storage
 
 Pendientes:
 
+-> Refactor usuarios carpetas autorizodos
 -> Navbar dejar ver admin solo a users que sean admin
 ->Agregar Loders
 -> Agregar Avisos si las listas estan vacias
@@ -24,3 +27,4 @@ Hechos:
 
 ->Crear componentes para el panel admin
 ->Creando servicios de folders.
+-> Asignar usuarios a carpetas
