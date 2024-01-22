@@ -3,16 +3,13 @@
 </script>
 
 <template>
-    <main>
-        <h2>Admin Panel</h2>
-        <nav>
-            <ul>
-                <li><RouterLink to="/admin/folders">Folders</RouterLink></li>
-                <li><RouterLink to="/admin/users">Users</RouterLink></li>
-            </ul>
-        </nav>
+    <div class="mt-0 pt-0 ma-5 pa-5">
+        <v-btn-toggle density="compact">
+            <v-btn :class="$route.fullPath.includes('/admin/folders')?'bg-grey-darken-3':'bg-grey-darken-1'" to="/admin/folders">Folders</v-btn>
+            <v-btn :class="$route.fullPath.includes('/admin/users')?'bg-grey-darken-3':'bg-grey-darken-1'" to="/admin/users">Users</v-btn>
+        </v-btn-toggle>
         <RouterView></RouterView>
-    </main>
+    </div>
 </template>
 
 <style scoped>

@@ -14,6 +14,12 @@ export type Photo = {
     urlPublica?: string
 }
 
+export type Folder = {
+    id?:string;
+    authorizedUsersId?:string[];
+    users?:UserData[];
+}
+
 
 export interface UserData {
     id:string;

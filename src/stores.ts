@@ -21,3 +21,8 @@ export const useAuthStore = defineStore('auth', ()=>{
 
     return {user, admin}
 })
+
+
+export const useAlertStore = defineStore('alert', ()=>{
+  
+})

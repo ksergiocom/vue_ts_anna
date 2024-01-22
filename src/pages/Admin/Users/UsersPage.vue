@@ -1,4 +1,4 @@
-<script setup lang="ts">
+b<script setup lang="ts">
 import Modal from '@/components/UI/Modal.vue'
 import { usersCollection } from '@/firebase'
 import { useCollection } from 'vuefire'
@@ -8,24 +8,16 @@ import { UserData } from '@/types'
 import CreateUser from './Modals/CreateUser.vue'
 
 let showCreateModal = ref(false) 
-const users = useCollection<UserData[]>(usersCollection)
+const users = useCollection<UserData[]>(usersCollection) as any
 
 </script>
 
 <template>
     <div>
-        <h3>Users page</h3>
-        <button @click="showCreateModal=true">Create new user</button>
-        <table>
-            <thead>
-                <th>Email</th>
-                <th>Admin</th>
-            </thead>
-            <tr v-for="user in users" :key="user.id">
-                <td>{{ user.email }}</td>
-                <td>{{ user.admin }}</td>
-            </tr>
-        </table>
+        <v-btn class="bg-green mt-5" @click="showCreateModal=true">Create new user</v-btn>
+        <v-card class="mt-5">
+            <v-data-table density="comfortable" :items="users"></v-data-table>
+        </v-card>
 
         <Modal v-if="showCreateModal" @close="showCreateModal=false">
             <CreateUser @created="showCreateModal=false"/>

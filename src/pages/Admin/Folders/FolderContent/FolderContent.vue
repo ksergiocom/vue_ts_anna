@@ -11,7 +11,7 @@
 
     import { UserData } from '@/types';
 
-    const users = useCollection<UserData[]>(usersCollection)
+    const users = useCollection<UserData>(usersCollection) as any
     const files = ref<String[]>([])
     const uploadedFiles = ref<FileList|null>()
     const showAuthorizedUsersModal = ref(false)
@@ -62,13 +62,15 @@
 
 <template>
     <div>
-        <h3>Folder: {{ folderName }}</h3>
-        <button class="danger" @click="handleDeleteFolder">Delete this folder</button>
-        <button @click="showAuthorizedUsersModal=true">Set users</button>
-        <form @submit.prevent="handleUploadFiles">
+        <h3 class="text-h3 mt-7 d-flex">Folder: {{ folderName }}</h3>
+        <div class="mt-5 d-flex ga-3">
+            <v-btn class="bg-green" @click="showAuthorizedUsersModal=true">Set users</v-btn>
+            <v-btn class="bg-red" @click="handleDeleteFolder">Delete folder</v-btn>
+        </div>
+        <form class="mt-7" @submit.prevent="handleUploadFiles">
             <input type="file" multiple @change="handleFileSelection">
         </form>
-        <ul>
+        <ul class="mt-7">
             <li v-for="file in files">
                 <span>{{ file }}</span>
                 <button class="danger" @click="handleDeleteFile(file as string)">Delete</button>
