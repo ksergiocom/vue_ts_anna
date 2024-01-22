@@ -13,7 +13,7 @@ import AdminUsersPage from '@/pages/Admin/Users/UsersPage.vue'
 
 import AdminFolderLayout from '@/pages/Admin/Folders/FolderLayout.vue'
 import AdminFoldersPage from '@/pages/Admin/Folders/FoldersPage/FoldersPage.vue'
-import AdminFolderContentPage from '@/pages/Admin/Folders/FolderContent.vue'
+import AdminFolderContentPage from '@/pages/Admin/Folders/FolderContent/FolderContent.vue'
 
 const routes = [
     {path:'/', component: HomePage},

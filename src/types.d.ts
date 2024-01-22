@@ -20,3 +20,8 @@ export interface UserData {
     fechaRegistro:Date;
     email:string;
 }
+
+export interface NewUserData {
+    email:string;
+    password:string;
+}

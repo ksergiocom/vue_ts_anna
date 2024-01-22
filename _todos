@@ -1,10 +1,14 @@
 Haciendo:
-
-->Creando servicios de folders.
-->Cloud functions para cuando se crean folders desde firebase panel. Se tiene que guardar la referencia en firestore de las carpetas y creaer el archivo .gf
+-> Asignar usuarios a carpetas
 
 Pendientes:
 
+-> Navbar dejar ver admin solo a users que sean admin
+->Agregar Loders
+-> Agregar Avisos si las listas estan vacias
+-> Crear mis composables
+->Cloud functions para cuando se crean folders desde firebase panel. Se tiene que guardar la referencia en firestore de las carpetas y creaer el archivo .gf
+-> Cloud Func: Cuando se elimina un usario debe eliminar todos los auth userid en firestore
 ->Crear un contador para saber espacio disponible
 ->Crear aparatado para public_photos
 Agregar snackbars alert Pinia
@@ -14,7 +18,9 @@ Agregar estados
 Hacer lazy imports de las rutas y componentes
 Sacar los refs a los servicios
 Crear test
+-> Refactor con Vuefire
 
 Hechos:
 
 ->Crear componentes para el panel admin
+->Creando servicios de folders.
