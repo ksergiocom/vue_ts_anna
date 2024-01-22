@@ -1,6 +1,6 @@
 const { onObjectFinalized, onObjectDeleted } = require("firebase-functions/v2/storage");
+const { onDocumentDeleted } = require('firebase-functions/v2/firestore')
 const { getStorage , getDownloadURL} = require("firebase-admin/storage");
-
 const functionsv1 = require('firebase-functions');
 const logger = require("firebase-functions/logger");
 const path = require('path')
@@ -165,3 +165,60 @@ exports.deleteUserFromFirestore = functionsv1.auth.user().onDelete(async user=>{
   logger.log(user)
   await db.collection('users').doc(user.uid).delete()
 })
+
+exports.sharedFolderDeletedFromFirestore = onDocumentDeleted({
+  region: 'europe-west3',
+  document: '/shared/{folderName}'
+}, async (event)=>{
+  const folderName = event.params.folderName
+
+
+  const bucket = admin.storage().bucket()
+
+  const [files] = await bucket.getFiles({ prefix: `shared/${folderName}/` });
+
+  const deletePromises = files.map(file => file.delete());
+
+  // Esperar a que se completen todas las eliminaciones
+  await Promise.all(deletePromises);
+
+  logger.log('Eliminados todos los archivos de ese folder')
+
+})
+
+exports.userDeletedFromFirestore = onDocumentDeleted({
+    region: 'europe-west3',
+    document: '/users/{userId}'
+  }, async event => {
+    const userId = event.params.userId
+
+      await admin.auth().deleteUser(userId);
+
+      // Recorrer la colección "shared" y actualizar los documentos
+      const sharedCollection = admin.firestore().collection('shared');
+      const sharedDocs = await sharedCollection.where('authorizedUsersId', 'array-contains', userId).get();
+
+      const updatePromises = [];
+
+      sharedDocs.forEach((doc) => {
+        const authorizedUsersId = doc.data().authorizedUsersId || [];
+        const updatedAuthorizedUsersId = authorizedUsersId.filter(uid => uid !== userId);
+
+        // Actualizar el documento en la colección "shared"
+        updatePromises.push(doc.ref.update({ authorizedUsersId: updatedAuthorizedUsersId }));
+      });
+
+      await Promise.all(updatePromises);
+
+      logger.log({
+        sharedCollection,
+        sharedDocs,
+        updatePromises,
+        authorizedUsersId,
+        updated
+      })
+
+      console.log('Usuario eliminado correctamente y actualizado en la colección "shared".');
+      return null;
+  }
+)

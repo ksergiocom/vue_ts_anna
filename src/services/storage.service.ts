@@ -52,13 +52,6 @@ class StorageService {
     }
 
     public static async deleteFolder(path:string){
-        // Verificar si la carpeta existe en Firestore
-        const docSnapshot = await getDoc(doc(db, path));
-        if (!docSnapshot.exists()) {
-            console.error(`La carpeta ${path} no existe.`);
-            return false;
-        }
-
         // Eliminar la carpeta en Firestore
         await deleteDoc(doc(db, path));
 

@@ -1,5 +1,6 @@
 Haciendo:
 -> Cloud functions
+    -> Cuando se borra del storage se tiene que borrar del firestore
     -> Cuando se borra un usuario borrar tambien todos los autorizedUserId
     -> Si se borra un documento de firestore se tiene que borrar tambien el folder en storage
 
