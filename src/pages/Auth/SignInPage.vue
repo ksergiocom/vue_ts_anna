@@ -34,7 +34,7 @@
         <v-form class="pa-5 mt-7" @submit.prevent="handleSubmit">
             <v-text-field type="email" label="Email"></v-text-field>
             <v-text-field type="password" label="Password"></v-text-field>
-            <v-btn @click.prevent="handleSubmit" block class="bg-green">Login</v-btn>
+            <v-btn type="submit" @click.prevent="handleSubmit" block class="bg-green">Login</v-btn>
         </v-form>
     </div>
 </template>
