@@ -4,13 +4,7 @@
     
     const store = useAlertStore()
     const isSet = ref(false)
-
-    const handleClose = () => {
-        store.setSnackbar({
-            color:'blue',
-            text:''
-        })
-    }
+    const type = ref<'info'|'success'|'error'>('info')
 
     // Tengo que hacerlo asi, si no , se queja vue por el timeout del store.
     watchEffect(()=>{
@@ -18,14 +12,24 @@
         else isSet.value = false
     })
 
+    watchEffect(()=>{
+            switch (store.snackbar.color){
+                case 'red':
+                    type.value = 'error'
+                    break
+                case 'green':
+                    type.value = 'success'
+                    break
+                default:
+                    type.value = 'info'
+                    break
+            }
+    })
+
 </script>
 
 <template>
-    <v-snackbar location="left bottom" :color="store.snackbar.color" v-model="isSet">
+    <v-alert :type="type" closable>
         {{store.snackbar.text}}
-
-        <template v-slot:actions>
-            <v-icon @click="handleClose()" icon="mdi-close"></v-icon>
-        </template>
-    </v-snackbar>
+    </v-alert>
 </template>

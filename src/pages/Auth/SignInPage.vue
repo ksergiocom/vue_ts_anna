@@ -8,11 +8,12 @@
     let email = ref('')
     let password = ref('')
     const store = useAlertStore()
+    const isLoading = ref(false)
 
     const router = useRouter()
 
     const handleSubmit = async () => {
-    
+        isLoading.value = true
         try {
             const userCredentials = await signInWithEmailAndPassword(auth, email.value, password.value)
             router.push('/')
@@ -25,6 +26,8 @@
                 color:'red',
                 text:'Invalid credentials'
             })
+        } finally {
+            isLoading.value = false
         }
     }
     
@@ -32,7 +35,7 @@
 
 <template>
     <div>
-        <v-form class="pa-5 mt-7" @submit.prevent="handleSubmit">
+        <v-form :disabled="isLoading" class="pa-5 mt-7" @submit.prevent="handleSubmit">
             <v-text-field v-model="email" type="email" label="Email"></v-text-field>
             <v-text-field v-model="password" type="password" label="Password"></v-text-field>
             <v-btn type="submit" @click.prevent="handleSubmit" block class="bg-green">Login</v-btn>
