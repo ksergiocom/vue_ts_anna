@@ -32,7 +32,6 @@ class AuthService {
         await updateDoc(doc(db,'shared',folderId),{
             authorizedUsersId: arrayUnion(authorizedUserId)
         })
-        console.log('Se ha agregado un usuario autorizado')
         return true
     }
 
@@ -40,7 +39,6 @@ class AuthService {
         await updateDoc(doc(db,'shared',folderId),{
             authorizedUsersId: arrayRemove(authorizedUserId)
         })
-        console.log('Se ha agregado un usuario autorizado')
         return true
     }
 

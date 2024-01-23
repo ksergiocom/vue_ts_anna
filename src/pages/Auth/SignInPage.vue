@@ -3,9 +3,11 @@
     import {auth} from '@/firebase'
     import {signInWithEmailAndPassword} from 'firebase/auth'
     import { useRouter } from 'vue-router'
+    import { useAlertStore } from '@/stores'
 
-    let email = ref('sergio@ksergio.com')
-    let password = ref('asdasd')
+    let email = ref('')
+    let password = ref('')
+    const store = useAlertStore()
 
     const router = useRouter()
 
@@ -13,27 +15,26 @@
     
         try {
             const userCredentials = await signInWithEmailAndPassword(auth, email.value, password.value)
-            console.log({userCredentials})
             router.push('/')
+            store.setSnackbar({
+                color:'green',
+                text:'Loged in as '+userCredentials.user.email
+            })
         } catch (error:any) {
-            alert('Error en SignInPage')
-            console.log(error.code)
-            console.log(error.message)
+            store.setSnackbar({
+                color:'red',
+                text:'Invalid credentials'
+            })
         }
     }
     
 </script>
 
 <template>
-    <!-- <form @submit.prevent="handleSubmit">
-        <input type="email" v-model="email">
-        <input type="password" v-model="password">
-        <input type="submit" value="Submit">
-    </form> -->
     <div>
         <v-form class="pa-5 mt-7" @submit.prevent="handleSubmit">
-            <v-text-field type="email" label="Email"></v-text-field>
-            <v-text-field type="password" label="Password"></v-text-field>
+            <v-text-field v-model="email" type="email" label="Email"></v-text-field>
+            <v-text-field v-model="password" type="password" label="Password"></v-text-field>
             <v-btn type="submit" @click.prevent="handleSubmit" block class="bg-green">Login</v-btn>
         </v-form>
     </div>

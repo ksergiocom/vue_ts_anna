@@ -30,13 +30,12 @@ class StorageService {
     public static async createFolder(path:string){
         // Validar que el nombre de la carpeta no contenga espacios en blanco
         if (/\s/.test(path)) {
-            console.error("El nombre de la carpeta no puede contener espacios en blanco.");
             return false;
         }
 
         // Comprobar si no existe una carpeta con ese nombre
         const docSnapshot = await getDoc(doc(db,path))
-        if(docSnapshot.exists()) return false
+        if(docSnapshot.exists()) throw Error('Ya existe una carpeta con ese nombre')
 
         // Crear la carpeta
         await setDoc(doc(db,path),{
@@ -66,8 +65,6 @@ class StorageService {
 
         // Esperar a que se completen todas las eliminaciones de archivos
         await Promise.all(deleteFilePromises);
-
-        console.log(`Carpeta ${path} y sus archivos eliminados exitosamente.`);
         return true;
     }
 
@@ -76,7 +73,6 @@ class StorageService {
         // Verificar si la carpeta existe en Firestore
         const docSnapshot = await getDoc(doc(db, folderPath));
         if (!docSnapshot.exists()) {
-            console.error(`La carpeta ${folderPath} no existe.`);
             return false;
         }
 
@@ -88,9 +84,8 @@ class StorageService {
 
             try {
                 await uploadBytes(fileRef, file);
-                console.log(`Archivo ${fileName} subido exitosamente a ${folderPath}`);
             } catch (error) {
-                console.error(`Error al subir el archivo ${fileName}:`, error);
+                throw Error('Error subiendo archivos en el servicio')
             }
         });
 
@@ -101,13 +96,10 @@ class StorageService {
     }
 
     public static async deleteFile(filePath: string): Promise<boolean> {
-        console.log({filePath})
 
         // Eliminar el archivo en Storage con las Cloud Funcions se borra automaticamente en firestore.
         const storageRef = ref(getStorage(), filePath);
         await deleteObject(storageRef);
-
-        console.log(`Archivo ${filePath} eliminado exitosamente.`);
         return true;
     }
 
@@ -117,7 +109,6 @@ class StorageService {
         await updateDoc(doc(db, `shared/${sharedFolderName}`), {
             authorizedUserId:usersIds
         })
-        console.log('Se han actualiazado los usarios autorizados')
         return true
     }
 

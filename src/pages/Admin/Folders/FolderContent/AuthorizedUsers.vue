@@ -2,6 +2,7 @@
     import { UserData } from '@/types';
     import { ref, computed } from 'vue';
     import { AuthService } from '@/services/auth.service';
+    import { useAlertStore } from '@/stores';
 
     const props = defineProps<{
         users:UserData[]
@@ -12,21 +13,52 @@
     const emits = defineEmits(['updated'])
     
     const select = ref<null|UserData>()
+    const isLoading = ref(false)
+    const store = useAlertStore()
+
     const usuariosNoAutorizados = computed(() => {
         // Filtrar usuarios que no están autorizados
         return props.users.filter(user => !props.authorizedUsers.some(authUser => authUser.id === user.id));
     })
 
     const handleChange = async () => {
-        if(select.value == null) return false
-        await AuthService.asignarUsuarioACarpeta(props.folderName, select.value.id)
-        emits('updated')
-        select.value = null
+        try {
+            if(select.value==null || select.value.email == null || select.value.id == null) return false
+            isLoading.value = true
+            await AuthService.asignarUsuarioACarpeta(props.folderName, select.value.id)
+            emits('updated')
+            store.setSnackbar({
+                color:'green',
+                text:`${select.value.email} authorized to ${props.folderName}`
+            })
+            select.value = null
+        } catch (error) {
+            store.setSnackbar({
+          color:'red',
+          text:`Error assigning user to folder`
+        })
+        } finally {
+            isLoading.value = false
+        }
     }
 
     const handleRemoveUser = async (user:UserData) => {
-        await AuthService.removerUsuarioACarpeta(props.folderName, user.id)
-        emits('updated')
+        try {
+            isLoading.value = true
+            await AuthService.removerUsuarioACarpeta(props.folderName, user.id)
+            emits('updated')
+            store.setSnackbar({
+                color:'green',
+                text:`${user.email} removed from authorized`
+            })
+        } catch (error) {
+            store.setSnackbar({
+          color:'red',
+          text:`Can't remove ${user.email} from authorized`
+        })
+        } finally {
+            isLoading.value = false
+        }
     }
 
 </script>
@@ -51,22 +83,21 @@
                 </div>
             </v-list>
         </v-card>
-        <v-combobox
-            class="mt-5"
-            label="Add user"
-            :items="usuariosNoAutorizados"
-            :return-object="true"
-            item-title="email"
-            v-model="select"
-            no-data-text="No users available"
-            :hide-no-data="true"
-            @update:model-value="handleChange"
-        ></v-combobox>
-        <!-- <h3>Selected users:</h3>
-        <ul>
-            <li v-for="user in newAuthorizedUsers" :key="user.id">{{ user.email }}</li>
-        </ul> -->
-        <!-- <button @click="updateAuthorizedUsers">Confirm</button> -->
+        <v-form :disabled="isLoading">
+            <v-combobox
+                :loading="isLoading"
+                :disabled="isLoading"
+                class="mt-5"
+                label="Add user"
+                :items="usuariosNoAutorizados"
+                :return-object="true"
+                item-title="email"
+                v-model="select"
+                no-data-text="No users available"
+                :hide-no-data="true"
+                @update:model-value="handleChange"
+            ></v-combobox>
+        </v-form>
     </div>
 </template>
 
@@ -77,5 +108,11 @@
         background-color: rgb(82, 82, 82);
         border-radius: 100%;
         padding: 0.5rem;
+    }
+
+    form{
+        max-width: 30%;
+        min-width: 300px;
+        margin: auto;
     }
 </style>

@@ -5,6 +5,7 @@
     import {AuthService} from '@/services/auth.service'
     import {StorageService} from '@/services/storage.service'
     import { useRoute, useRouter } from 'vue-router';
+    import { useAlertStore } from '@/stores';
 
     import AuthorizedUsers from './AuthorizedUsers.vue';
     import Modal from '@/components/UI/Modal.vue';
@@ -19,21 +20,37 @@
     const authorizedUsers = ref<UserData[]>([])
     const isLoading = ref(false)
     const fileInput = ref()
+    const store = useAlertStore()
 
     const router = useRouter()
     const folderName = useRoute().params.folderName as string
 
     onMounted(async ()=>{
         isLoading.value = true
-        authorizedUsers.value = await AuthService.getAuthorizedUsers(folderName)
-        files.value = await StorageService.getFiles('/shared/'+folderName)
-        isLoading.value = false
+        try {
+            authorizedUsers.value = await AuthService.getAuthorizedUsers(folderName)
+            files.value = await StorageService.getFiles('/shared/'+folderName)
+        } catch (error) {
+            store.setSnackbar({
+                color:'red',
+                text:`Error getting files`
+            })
+        } finally {
+            isLoading.value = false
+        }
     })
 
     const handleDeleteFolder = async () => {
         if(!confirm('Are you sure?')) return false
-        await StorageService.deleteFolder(`shared/${folderName}`)
-        router.push('/admin/folders')
+        try {
+            await StorageService.deleteFolder(`shared/${folderName}`)
+            router.push('/admin/folders')
+        } catch (error) {
+            store.setSnackbar({
+            color:'red',
+            text:`Error deleting folder`
+            })
+        }
     }
 
     const selectFiles = async () => {
@@ -45,10 +62,23 @@
     const handleUploadFiles = async () => {
         if (uploadedFiles.value) {
             isLoading.value = true
-            await StorageService.uploadFiles(`shared/${folderName}`, uploadedFiles.value)
-            // Actualizar la lista de archivos después de cargar nuevos archivos
-            files.value = await StorageService.getFiles('/shared/' + folderName)
-            isLoading.value = false
+
+            try {
+                await StorageService.uploadFiles(`shared/${folderName}`, uploadedFiles.value)
+                // Actualizar la lista de archivos después de cargar nuevos archivos
+                files.value = await StorageService.getFiles('/shared/' + folderName)
+                store.setSnackbar({
+                    color:'green',
+                    text:`Files uploaded`
+                })
+            } catch (error) {
+                store.setSnackbar({
+                    color:'red',
+                    text:`Error uploading files`
+                    })
+            } finally {
+                isLoading.value = false
+            }
         }
     }
 
@@ -61,10 +91,23 @@
     const handleDeleteFile = async (fileName: string) => {
         if(!confirm('Are you sure?')) return false
         isLoading.value = true
-        await StorageService.deleteFile(`shared/${folderName}/${fileName}`)
-        // Actualizar la lista de archivos después de eliminar un archivo
-        files.value = await StorageService.getFiles('/shared/' + folderName)
-        isLoading.value = false
+        try {
+            
+            await StorageService.deleteFile(`shared/${folderName}/${fileName}`)
+            // Actualizar la lista de archivos después de eliminar un archivo
+            files.value = await StorageService.getFiles('/shared/' + folderName)
+            store.setSnackbar({
+                color:'green',
+                text:`File ${fileName} deleted`
+            })
+        } catch (error) {
+            store.setSnackbar({
+          color:'red',
+          text:`Can't delete the file ${fileName}`
+        })
+        } finally {
+            isLoading.value = false
+        }
     }
 
     const handleUpdatedAuthorizedUsers = async () => {

@@ -32,3 +32,8 @@ export interface NewUserData {
     email:string;
     password:string;
 }
+
+export interface Snackbar {
+    color: 'green' | 'blue' | 'red'
+    text: string
+  }

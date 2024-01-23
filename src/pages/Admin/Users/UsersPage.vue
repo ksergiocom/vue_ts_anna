@@ -26,7 +26,6 @@ const users = useCollection<UserData[]>(usersCollection) as any // Aqui falta el
                     </tr>
                 </tbody>
             </v-table>
-            <!-- <v-data-table density="comfortable" :items="users"></v-data-table> -->
         </v-card>
 
         <Modal v-if="showCreateModal" @close="showCreateModal=false">

@@ -59,7 +59,6 @@ class PhotosService {
             }
         }
     }
-        console.log(blobs);
     
         return blobs;
       }

@@ -3,20 +3,25 @@
     import { auth } from '@/firebase'
     import {signOut} from 'firebase/auth'
     import { onBeforeMount } from 'vue';
+    import {useAlertStore} from '@/stores'
 
-    onBeforeMount(async ()=>{
+
+    onBeforeMount(async () => {
         const router = useRouter()
-        
-        onBeforeMount(async () => {
-            try {
-                await signOut(auth)
-            } catch (error) {
-                console.log('Ha ocurrido un error en el componente SIGNOUT')
-                console.error({error})
-            } finally{
-                router.push('/sign-in')
-            }
-        })
+        const store = useAlertStore()
+
+        try {
+            await signOut(auth)
+        } catch (error) {
+            console.log('Ha ocurrido un error en el componente SIGNOUT')
+            console.error({error})
+        } finally{
+            store.setSnackbar({
+                color:'green',
+                text:'Logged out'
+            })
+            router.push('/sign-in')
+        }
     })
 
 </script>
