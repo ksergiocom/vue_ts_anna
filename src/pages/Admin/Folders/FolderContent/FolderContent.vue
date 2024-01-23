@@ -8,21 +8,26 @@
 
     import AuthorizedUsers from './AuthorizedUsers.vue';
     import Modal from '@/components/UI/Modal.vue';
+    import Spinner from '@/components/UI/Spinner.vue';
 
     import { UserData } from '@/types';
 
     const users = useCollection<UserData>(usersCollection) as any
-    const files = ref<String[]>([])
+    const files = ref<any[]>([])
     const uploadedFiles = ref<FileList|null>()
     const showAuthorizedUsersModal = ref(false)
     const authorizedUsers = ref<UserData[]>([])
+    const isLoading = ref(false)
+    const fileInput = ref()
 
     const router = useRouter()
     const folderName = useRoute().params.folderName as string
 
     onMounted(async ()=>{
+        isLoading.value = true
         authorizedUsers.value = await AuthService.getAuthorizedUsers(folderName)
         files.value = await StorageService.getFiles('/shared/'+folderName)
+        isLoading.value = false
     })
 
     const handleDeleteFolder = async () => {
@@ -31,11 +36,19 @@
         router.push('/admin/folders')
     }
 
+    const selectFiles = async () => {
+        if(fileInput.value){
+            fileInput.value.click()
+        }
+    }
+
     const handleUploadFiles = async () => {
         if (uploadedFiles.value) {
+            isLoading.value = true
             await StorageService.uploadFiles(`shared/${folderName}`, uploadedFiles.value)
             // Actualizar la lista de archivos después de cargar nuevos archivos
             files.value = await StorageService.getFiles('/shared/' + folderName)
+            isLoading.value = false
         }
     }
 
@@ -47,9 +60,11 @@
 
     const handleDeleteFile = async (fileName: string) => {
         if(!confirm('Are you sure?')) return false
+        isLoading.value = true
         await StorageService.deleteFile(`shared/${folderName}/${fileName}`)
         // Actualizar la lista de archivos después de eliminar un archivo
         files.value = await StorageService.getFiles('/shared/' + folderName)
+        isLoading.value = false
     }
 
     const handleUpdatedAuthorizedUsers = async () => {
@@ -64,20 +79,45 @@
     <div>
         <h3 class="text-h3 mt-7 d-flex">Folder: {{ folderName }}</h3>
         <div class="mt-5 d-flex ga-3">
-            <v-btn class="bg-green" @click="showAuthorizedUsersModal=true">Set users</v-btn>
+            <v-btn :disabled="isLoading" class="bg-green" @click="selectFiles">Upload files</v-btn>
+            <v-btn class="bg-grey-darken-1" @click="showAuthorizedUsersModal=true">Set users</v-btn>
             <v-btn class="bg-red" @click="handleDeleteFolder">Delete folder</v-btn>
         </div>
-        <form class="mt-7" @submit.prevent="handleUploadFiles">
-            <input type="file" multiple @change="handleFileSelection">
+        <form>
+            <input ref="fileInput" class="hidden" type="file" multiple @change="handleFileSelection" accept="image/*">
         </form>
-        <ul class="mt-7">
-            <li v-for="file in files">
-                <span>{{ file }}</span>
-                <button class="danger" @click="handleDeleteFile(file as string)">Delete</button>
-            </li>
-        </ul>
+        <v-card class="mt-7 bg-grey-darken-2">
+            <div v-if="isLoading" class="justify-center d-flex">
+                <Spinner class="pa-5 mx-auto" color="white" :opacity="50" ></Spinner>
+            </div>
+            <v-list v-else="isLoading" class="bg-grey-darken-2">
+                <div v-if="files.length>0">
+                    <v-list-item  v-for="file in files" :key="file.id">
+                        <div class="d-flex justify-space-between">
+                            <span>{{ file }}</span>
+                            <v-icon class="hover" icon="mdi-close" @click="handleDeleteFile(file)"></v-icon>
+                        </div>
+                    </v-list-item>
+                </div>
+                <div class="text-center text-grey" v-else>
+                    <v-list-item>Folder is empty</v-list-item>
+                </div>
+            </v-list>
+        </v-card>
         <Modal v-if="showAuthorizedUsersModal==true" @close="showAuthorizedUsersModal=false">
             <AuthorizedUsers :users="users" :authorizedUsers="authorizedUsers" :folderName="folderName" @updated="handleUpdatedAuthorizedUsers"/>
         </Modal>
     </div>
 </template>
+
+<style scoped>
+    .hover:hover{
+        background-color: rgb(82, 82, 82);
+        border-radius: 100%;
+        padding: 0.5rem;
+    }
+
+    .hidden{
+        display: none;
+    }
+</style>

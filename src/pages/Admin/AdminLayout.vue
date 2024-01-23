@@ -5,8 +5,8 @@
 <template>
     <div class="mt-0 pt-0 ma-5 pa-5">
         <v-btn-toggle density="compact">
-            <v-btn :class="$route.fullPath.includes('/admin/folders')?'bg-grey-darken-3':'bg-grey-darken-1'" to="/admin/folders">Folders</v-btn>
-            <v-btn :class="$route.fullPath.includes('/admin/users')?'bg-grey-darken-3':'bg-grey-darken-1'" to="/admin/users">Users</v-btn>
+            <v-btn :class="'bg-grey-darken-1'" to="/admin/folders">Folders</v-btn>
+            <v-btn :class="'bg-grey-darken-1'" to="/admin/users">Users</v-btn>
         </v-btn-toggle>
         <RouterView></RouterView>
     </div>
