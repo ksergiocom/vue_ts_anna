@@ -68,9 +68,7 @@
     }
 
     const handleUpdatedAuthorizedUsers = async () => {
-        showAuthorizedUsersModal.value = false
         authorizedUsers.value = await AuthService.getAuthorizedUsers(folderName)
-        alert('Se han actualizado los usarios autorizados')
     }
 
 </script>

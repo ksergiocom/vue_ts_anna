@@ -1,6 +1,6 @@
 import { db, auth } from "@/firebase";
 import { createUserWithEmailAndPassword} from 'firebase/auth';
-import { getDocs, collection, updateDoc, doc, getDoc } from "firebase/firestore";
+import { getDocs, collection, updateDoc, doc, getDoc, arrayUnion, arrayRemove } from "firebase/firestore";
 import { UserData } from "@/types";
 
 import { NewUserData } from '@/types'
@@ -28,11 +28,19 @@ class AuthService {
         return users
     }
 
-    public static async asignarUsuariosACarpeta(folderId:string, authorizedUsersId:string[]):Promise<boolean>{
+    public static async asignarUsuarioACarpeta(folderId:string, authorizedUserId:string):Promise<boolean>{
         await updateDoc(doc(db,'shared',folderId),{
-            authorizedUsersId
+            authorizedUsersId: arrayUnion(authorizedUserId)
         })
-        console.log('Se han actualizado los usuarios autorizados')
+        console.log('Se ha agregado un usuario autorizado')
+        return true
+    }
+
+    public static async removerUsuarioACarpeta(folderId:string, authorizedUserId:string):Promise<boolean>{
+        await updateDoc(doc(db,'shared',folderId),{
+            authorizedUsersId: arrayRemove(authorizedUserId)
+        })
+        console.log('Se ha agregado un usuario autorizado')
         return true
     }
 
