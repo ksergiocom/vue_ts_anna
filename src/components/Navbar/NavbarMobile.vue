@@ -17,17 +17,19 @@
 
 <template>
     <div class="btn-container">
-        <img @click="toggleShowMenu(true)" class="menu-btn" :src="MenuSVG"/>
+        <!-- <img @click="toggleShowMenu(true)" class="menu-btn" :src="MenuSVG"/> -->
+        <v-icon icon="mdi-menu" @click="toggleShowMenu(true)"></v-icon>
         <Transition>
-            <div v-show="showMenu" class="menu-body">
-                <img @click="toggleShowMenu(false)" class="close-menu-btn menu-btn" :src="CloseSVG"/>
+            <div v-show="showMenu" class="menu-body" @click="toggleShowMenu(false)">
+                <v-icon icon="mdi-close close-menu-btn"></v-icon>
+                <!-- <img @click="toggleShowMenu(false)" class="close-menu-btn menu-btn" :src="CloseSVG"/> -->
                 <ul>
                     <li><RouterLink @click="toggleShowMenu(false)" to="/">Home</RouterLink></li>
                     <li v-if="store.user && store.admin"><RouterLink @click="toggleShowMenu(false)" to="/admin">Admin</RouterLink></li>
                     <li><RouterLink @click="toggleShowMenu(false)" to="/contact">Contact</RouterLink></li>
                     <li v-if="!store.user"><RouterLink @click="toggleShowMenu(false)" to="/sign-in">Sign In</RouterLink></li>
+                    <li v-if="store.user"><RouterLink @click="toggleShowMenu(false)" to="/shared">Shared</RouterLink></li>
                     <li v-if="store.user"><RouterLink @click="toggleShowMenu(false)" to="/sign-out">Sign Out</RouterLink></li>
-                    <li><RouterLink @click="toggleShowMenu(false)" to="/shared">Shared</RouterLink></li>
                 </ul>
             </div>
         </Transition>

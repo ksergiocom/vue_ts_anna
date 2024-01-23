@@ -25,13 +25,32 @@
 </script>
 
 <template>
-    <form @submit.prevent="handleSubmit">
+    <!-- <form @submit.prevent="handleSubmit">
         <input type="email" v-model="email">
         <input type="password" v-model="password">
         <input type="submit" value="Submit">
-    </form>
+    </form> -->
+    <div>
+        <v-form class="pa-5 mt-7" @submit.prevent="handleSubmit">
+            <v-text-field type="email" label="Email"></v-text-field>
+            <v-text-field type="password" label="Password"></v-text-field>
+            <v-btn @click.prevent="handleSubmit" block class="bg-green">Login</v-btn>
+        </v-form>
+    </div>
 </template>
 
 <style scoped>
+    div{
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 100%;
+        place-content: center;
+    }
 
+    form{
+        max-width: 30%;
+        min-width: 300px;
+        margin: auto;
+    }
 </style>

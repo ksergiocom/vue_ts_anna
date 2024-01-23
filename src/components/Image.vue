@@ -30,15 +30,16 @@
         display: flex;
         height: 100%;
         width: 100%;
-        background-color: rgba(0,0,0,0.05);
+        background-color: rgba(0,0,0,0.2);
+        overflow: hidden;
     }
 
     img{
         height: 100%;
         width: 100%;
         object-fit: cover;
-        transition: all 220ms ease-in;
-        overflow: hidden;
+        transition: opacity 180ms ease-in;
+        /* transition: transform 50ms ease-in; */
     }
 
     .image[lazy="loading"] {
@@ -53,6 +54,11 @@
         object-fit: cover;
         overflow: hidden;
 
+    }
+
+    .image[lazy="loaded"]:hover{
+        /* transform: scale(101%); */
+        cursor: pointer;
     }
 
 

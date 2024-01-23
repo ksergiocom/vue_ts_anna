@@ -7,6 +7,8 @@
         password:'',
     })
 
+    const valid = ref(false)
+
     const emit = defineEmits(['created'])
 
     const handleSubmit = async () => {
@@ -18,9 +20,16 @@
 </script>
 
 <template>
-    <form @submit.prevent="handleSubmit">
-        <input v-model="formData.email" placeholder="email" type="email">
-        <input v-model="formData.password" placeholder="password" type="password">
-        <input type="submit">
-    </form>
+    <v-form :valid="valid" @submit.prevent="handleSubmit">
+        <v-text-field label="Email" v-model="formData.email" type="email"></v-text-field>
+        <v-text-field label="Password" v-model="formData.password" type="password"></v-text-field>
+        <v-btn @click="handleSubmit" block class="bg-green">Create user</v-btn>
+    </v-form>
 </template>
+
+<style scoped>
+    form{
+        min-width: 300px;
+        padding: 1rem;
+    }
+</style>

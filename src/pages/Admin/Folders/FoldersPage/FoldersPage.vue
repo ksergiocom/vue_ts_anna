@@ -48,7 +48,7 @@
                             {{ folder.id }}
                             </RouterLink>
                         </td>
-                        <td>
+                        <td class="text-right">
                             <v-chip :class="user.admin?'bg-red':''" v-for="user in folder.authorizedUsers" :key="user.id">
                                 {{ user.email }}
                             </v-chip>
