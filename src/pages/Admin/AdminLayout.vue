@@ -3,7 +3,7 @@
 </script>
 
 <template>
-    <main class="bg-grey-lighten-4 pa-5">
+    <main class="pa-5">
         <v-btn-toggle density="compact">
             <v-btn :class="['bg-grey-darken-1',$route.path.includes('/admin/folders')?'':'text-grey']" to="/admin/folders">Folders</v-btn>
             <v-btn :class="['bg-grey-darken-1',$route.path.includes('/admin/users')?'':'text-grey']" to="/admin/users">Users</v-btn>

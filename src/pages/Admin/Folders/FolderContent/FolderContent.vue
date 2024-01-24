@@ -11,7 +11,7 @@
     import Modal from '@/components/UI/Modal.vue';
     import Spinner from '@/components/UI/Spinner.vue';
 
-    import { UserData, Photo } from '@/types';
+    import { UserData } from '@/types';
 
     const users = useCollection<UserData>(usersCollection) as any
     const files = ref<any[]>([])
@@ -122,7 +122,7 @@
 
 <template>
     <div>
-        <h3 class="text-h3 mt-7 d-flex">Folder: {{ folderName }}</h3>
+        <h3 class="text-h3 mt-7 d-flex">{{ folderName }}</h3>
         <div class="mt-5 d-flex ga-3 flex-wrap">
             <v-btn :disabled="isLoading" class="bg-green" @click="selectFiles">Upload files</v-btn>
             <v-btn class="bg-grey-darken-1" @click="showAuthorizedUsersModal=true">Set users</v-btn>
@@ -139,7 +139,7 @@
                 <div v-if="files.length>0">
                     <v-list-item  v-for="file in files" :key="file.id">
                         <div class="d-flex justify-space-between">
-                            <span @click="openFile(file)">{{ file }}</span>
+                            <span class="downloadable" @click="openFile(file)">{{ file }}</span>
                             <v-icon class="hover" icon="mdi-close" @click="handleDeleteFile(file)"></v-icon>
                         </div>
                     </v-list-item>
@@ -156,10 +156,22 @@
 </template>
 
 <style scoped>
-    .hover:hover{
-        background-color: rgb(82, 82, 82);
+    *{
+        transition: color 0.1s ease-in;
+        transition: background-color 0.1s ease-in;
+    }
+
+    .hover{
         border-radius: 100%;
         padding: 0.5rem;
+    }
+    .hover:hover{
+        background-color: rgb(82, 82, 82);
+    }
+
+    .downloadable:hover{
+        cursor: pointer;
+        color: rgb(209, 209, 209);
     }
 
     .hidden{
