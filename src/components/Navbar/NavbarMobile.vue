@@ -21,12 +21,12 @@
                 <v-icon color="grey-darken-1" icon="mdi-close close-menu-btn"></v-icon>
                 <!-- <img @click="toggleShowMenu(false)" class="close-menu-btn menu-btn" :src="CloseSVG"/> -->
                 <ul>
-                    <li><RouterLink class="text-grey-darken-1" @click="toggleShowMenu(false)" to="/">Home</RouterLink></li>
-                    <li v-if="store.user && store.admin"><RouterLink class="text-grey-darken-1" @click="toggleShowMenu(false)" to="/admin">Admin</RouterLink></li>
-                    <li><RouterLink class="text-grey-darken-1" @click="toggleShowMenu(false)" to="/contact">Contact</RouterLink></li>
-                    <li v-if="!store.user"><RouterLink class="text-grey-darken-1" @click="toggleShowMenu(false)" to="/sign-in">Sign In</RouterLink></li>
-                    <li v-if="store.user"><RouterLink class="text-grey-darken-1" @click="toggleShowMenu(false)" to="/shared">Shared</RouterLink></li>
-                    <li v-if="store.user"><RouterLink class="text-grey-darken-1" @click="toggleShowMenu(false)" to="/sign-out">Sign Out</RouterLink></li>
+                    <li><RouterLink class="" @click="toggleShowMenu(false)" to="/">Home</RouterLink></li>
+                    <li v-if="store.user && store.admin"><RouterLink @click="toggleShowMenu(false)" to="/admin">Admin</RouterLink></li>
+                    <li><RouterLink class="" @click="toggleShowMenu(false)" to="/contact">Contact</RouterLink></li>
+                    <li v-if="!store.user"><RouterLink class="" @click="toggleShowMenu(false)" to="/sign-in">Sign In</RouterLink></li>
+                    <li v-if="store.user"><RouterLink class="" @click="toggleShowMenu(false)" to="/shared">Shared</RouterLink></li>
+                    <li v-if="store.user"><RouterLink class="" @click="toggleShowMenu(false)" to="/sign-out">Sign Out</RouterLink></li>
                 </ul>
             </div>
         </Transition>
@@ -46,6 +46,16 @@
         letter-spacing: 0.1rem;
         font-size: 1.5rem;
         text-transform: uppercase;
+        color: rgb(128, 128, 128);
+        transition: color 0.1s ease;
+    }
+
+    .router-link-active{
+        color: rgb(83, 83, 83);
+    }
+
+    a:hover{
+        color: rgb(83, 83, 83);
     }
 
     .btn-container{

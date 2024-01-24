@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import mainLogo from "@/assets/img/main-logo.jpg";
+    // import mainLogo from "@/assets/img/main-logo.jpg";
     import NavbarMobile from "./NavbarMobile.vue";
     import Alert from "../UI/Alert.vue";
 </script>
@@ -7,9 +7,9 @@
 <template>
     <div class="sticky">
         <nav style="z-index: 11; position: relative;">
-            <h3>
+            <!-- <h3>
                 <RouterLink to="/"><img id="main-logo" :src="mainLogo" alt="main-logo"></RouterLink>
-            </h3>
+            </h3> -->
             <NavbarMobile/>
         </nav>
         <Alert/>

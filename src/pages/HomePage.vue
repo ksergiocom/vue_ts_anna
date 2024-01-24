@@ -16,32 +16,58 @@
     <main>
         <v-parallax
         id="hero"
-        class="mb-10"
         src="https://cdn.vuetifyjs.com/images/parallax/material2.jpg"
         >
-            <div class="d-flex flex-column fill-height justify-center align-center text-white">
-            <h1 class="text-h4 font-weight-thin mb-4">
-                Vue, Firebase y TS
-            </h1>
-            <p class="text-center w-1/2">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum quia nihil quo error est dolores qui, tempore ratione esse voluptatem sequi, laborum incidunt ea quaerat vero cupiditate doloremque. Est, officia.
-            </p>
+            <div id="hero-text" class="d-flex flex-column justify-between h-100 pa-10 text-center">
+                <div class="d-flex flex-column my-auto h-full">
+                    <h1 class="text-white ">Welcome!</h1>
+                    <p class="text-white ">Where every click tells a story.</p>
+                </div>
             </div>
         </v-parallax>
-        <Gallery :photos="photos"/>
+        <section id="gallery">
+            <Gallery :photos="photos"/>
+        </section>
     </main>
 </template>
 
 
 <style scoped>
-    /* @media (min-width: 800px) {
-        main{
-            width: 60%;
-            margin: auto;
-        }
-    } */
+    article{
+        background-color: white;
+        border-radius: 5px;
+        padding: 1rem;
+        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    }
 
     #hero{
-        height: 100vh;
+        height: 70vh;
+    }
+
+    @media (min-width: 600px) {   
+
+        #gallery{
+            width: 80%;
+            margin: auto;
+        }
+        
+        #hero-text{
+            width: 75%;
+            margin: auto;
+        }
+
+    }
+
+    @media (min-width: 1200px) {   
+
+        #gallery{
+            width: 85%;
+            margin: auto;
+        }
+
+        #hero-text{
+            width: 50%;
+            margin: auto;
+        }
     }
 </style>

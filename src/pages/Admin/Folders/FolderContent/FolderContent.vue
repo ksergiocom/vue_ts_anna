@@ -119,7 +119,7 @@
 <template>
     <div>
         <h3 class="text-h3 mt-7 d-flex">Folder: {{ folderName }}</h3>
-        <div class="mt-5 d-flex ga-3">
+        <div class="mt-5 d-flex ga-3 flex-wrap">
             <v-btn :disabled="isLoading" class="bg-green" @click="selectFiles">Upload files</v-btn>
             <v-btn class="bg-grey-darken-1" @click="showAuthorizedUsersModal=true">Set users</v-btn>
             <v-btn class="bg-red" @click="handleDeleteFolder">Delete folder</v-btn>

@@ -1,32 +1,32 @@
 Haciendo:
--> Refactor con Vuefire
+
 
 
 Pendientes:
 
--> Refactor Modales
+-> Panel admin al hacer click que se descargue la foto
+-> Quizas refactor con v-img
+-> Agregar imagenes placeholders y error
 -> Magic link para auth
--> Refactor usuarios carpetas autorizodos
--> Navbar dejar ver admin solo a users que sean admin
-->Agregar Loders
--> Agregar Avisos si las listas estan vacias
 -> Crear mis composables
-->Cloud functions para cuando se crean folders desde firebase panel. Se tiene que guardar la referencia en firestore de las carpetas y creaer el archivo .gf
--> Cloud Func: Cuando se elimina un usario debe eliminar todos los auth userid en firestore
-->Crear un contador para saber espacio disponible
-->Crear aparatado para public_photos
-Agregar snackbars alert Pinia
-Agregar Estado auth con Pinia
-Separar rutas en distintas paginas
-Agregar estados
-Hacer lazy imports de las rutas y componentes
-Sacar los refs a los servicios
-Crear test
+-> Separar rutas en distintas paginas
+-> Hacer lazy imports de las rutas y componentes
+-> Crear test
 
-No me fucnionan las cloud functions! -> Si se borra un documento de firestore se tiene que borrar tambien el folder en storage
+->Crear un contador para saber espacio disponible
+-> Crear aparatado para public_photos
+-> Agregar Avisos si las listas estan vacias
+-> No me fucnionan las cloud functions! -> Si se borra un documento de firestore se tiene que borrar tambien el folder en storage
 
 Hechos:
 
+->Cloud functions para cuando se crean folders desde firebase panel. Se tiene que guardar la referencia en firestore de las carpetas y creaer el archivo .gf
+-> Cloud Func: Cuando se elimina un usario debe eliminar todos los auth userid en firestore
+-> Agregar snackbars alert Pinia
+-> Agregar Estado auth con Pinia
+-> Agregar estados
+-> Agregar Loders
+-> Navbar dejar ver admin solo a users que sean admin
 -> Algunos estilos
 -> Confirm deletion folders and users
 -> Cuando se borra del storage se tiene que borrar del firestore
@@ -34,3 +34,4 @@ Hechos:
 ->Crear componentes para el panel admin
 ->Creando servicios de folders.
 -> Asignar usuarios a carpetas
+-> Estilos basicos

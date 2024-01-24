@@ -151,7 +151,6 @@
 
 <style scoped>
     .grid {
-        width: 100%;
         height: 100%;
         display: grid;
         grid-template-columns: repeat(2, 1fr); /* Dos columnas de igual ancho */
@@ -160,6 +159,7 @@
         grid-auto-flow: dense;
         gap: 5px;
         justify-content: center;
+        margin: 5px;
     }
 
     img{
@@ -184,6 +184,13 @@
 
     .v{
         grid-row: span 2;
+    }
+
+    @media (min-width:1000px) {
+        .grid{
+            grid-template-columns: repeat(3, 1fr); /* Dos columnas de igual ancho */
+            grid-auto-rows: calc(0.67 * (100vw / 3)); 
+        }
     }
 
 </style>
