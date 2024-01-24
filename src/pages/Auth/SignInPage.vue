@@ -16,11 +16,16 @@
         isLoading.value = true
         try {
             const userCredentials = await signInWithEmailAndPassword(auth, email.value, password.value)
-            router.push('/')
             store.setSnackbar({
                 color:'green',
                 text:'Loged in as '+userCredentials.user.email
             })
+            const token = await userCredentials.user.getIdTokenResult()
+            if(token.claims.admin){
+                router.push('/admin')
+            }else{
+                router.push('/shared')
+            }
         } catch (error:any) {
             store.setSnackbar({
                 color:'red',
@@ -36,8 +41,8 @@
 <template>
     <div>
         <v-form :disabled="isLoading" class="pa-5 mt-7" @submit.prevent="handleSubmit">
-            <v-text-field v-model="email" type="email" label="Email"></v-text-field>
-            <v-text-field v-model="password" type="password" label="Password"></v-text-field>
+            <v-text-field variant="outlined" v-model="email" type="email" label="Email"></v-text-field>
+            <v-text-field variant="outlined" v-model="password" type="password" label="Password"></v-text-field>
             <v-btn type="submit" @click.prevent="handleSubmit" block class="bg-green">Login</v-btn>
         </v-form>
     </div>

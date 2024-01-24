@@ -37,8 +37,8 @@
 
 <template>
     <v-form :disabled="isLoading" :valid="valid" @submit.prevent="handleSubmit">
-        <v-text-field label="Email" v-model="formData.email" type="email"></v-text-field>
-        <v-text-field class="mt-5" label="Password" v-model="formData.password" type="password"></v-text-field>
+        <v-text-field variant="outlined" label="Email" v-model="formData.email" type="email"></v-text-field>
+        <v-text-field variant="outlined" class="mt-5" label="Password" v-model="formData.password" type="password"></v-text-field>
         <v-btn type="submit" @click="handleSubmit" block class="bg-green mt-5">Create user</v-btn>
     </v-form>
 </template>

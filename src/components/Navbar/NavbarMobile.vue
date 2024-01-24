@@ -1,8 +1,5 @@
 <script setup lang="ts">
-    import MenuSVG from '@/assets/img/menu.svg'
-    import CloseSVG from '@/assets/img/close.svg'
     import {ref} from 'vue'
-    import {useCurrentUser} from 'vuefire'
     import {useAuthStore} from '@/stores'
 
     let showMenu = ref(false)
@@ -18,18 +15,18 @@
 <template>
     <div class="btn-container">
         <!-- <img @click="toggleShowMenu(true)" class="menu-btn" :src="MenuSVG"/> -->
-        <v-icon icon="mdi-menu" @click="toggleShowMenu(true)"></v-icon>
+        <v-icon color="grey-darken-1" icon="mdi-menu" @click="toggleShowMenu(true)"></v-icon>
         <Transition>
             <div v-show="showMenu" class="menu-body" @click="toggleShowMenu(false)">
-                <v-icon icon="mdi-close close-menu-btn"></v-icon>
+                <v-icon color="grey-darken-1" icon="mdi-close close-menu-btn"></v-icon>
                 <!-- <img @click="toggleShowMenu(false)" class="close-menu-btn menu-btn" :src="CloseSVG"/> -->
                 <ul>
-                    <li><RouterLink @click="toggleShowMenu(false)" to="/">Home</RouterLink></li>
-                    <li v-if="store.user && store.admin"><RouterLink @click="toggleShowMenu(false)" to="/admin">Admin</RouterLink></li>
-                    <li><RouterLink @click="toggleShowMenu(false)" to="/contact">Contact</RouterLink></li>
-                    <li v-if="!store.user"><RouterLink @click="toggleShowMenu(false)" to="/sign-in">Sign In</RouterLink></li>
-                    <li v-if="store.user"><RouterLink @click="toggleShowMenu(false)" to="/shared">Shared</RouterLink></li>
-                    <li v-if="store.user"><RouterLink @click="toggleShowMenu(false)" to="/sign-out">Sign Out</RouterLink></li>
+                    <li><RouterLink class="text-grey-darken-1" @click="toggleShowMenu(false)" to="/">Home</RouterLink></li>
+                    <li v-if="store.user && store.admin"><RouterLink class="text-grey-darken-1" @click="toggleShowMenu(false)" to="/admin">Admin</RouterLink></li>
+                    <li><RouterLink class="text-grey-darken-1" @click="toggleShowMenu(false)" to="/contact">Contact</RouterLink></li>
+                    <li v-if="!store.user"><RouterLink class="text-grey-darken-1" @click="toggleShowMenu(false)" to="/sign-in">Sign In</RouterLink></li>
+                    <li v-if="store.user"><RouterLink class="text-grey-darken-1" @click="toggleShowMenu(false)" to="/shared">Shared</RouterLink></li>
+                    <li v-if="store.user"><RouterLink class="text-grey-darken-1" @click="toggleShowMenu(false)" to="/sign-out">Sign Out</RouterLink></li>
                 </ul>
             </div>
         </Transition>
@@ -45,8 +42,6 @@
     }
 
     a{
-        opacity: 50%;
-        color: black;
         text-decoration: none;
         letter-spacing: 0.1rem;
         font-size: 1.5rem;
@@ -59,7 +54,7 @@
     }
     
     .menu-btn{
-        height: 1.7rem;
+        height: 2rem;
         opacity: 70%;
         cursor: pointer;
     }
@@ -68,7 +63,7 @@
         position: absolute;
         right: 0;
         top: 0;
-        margin: 1.7rem 1rem;
+        margin: 2rem 1rem;
         z-index: 10;
         cursor: pointer;
     }

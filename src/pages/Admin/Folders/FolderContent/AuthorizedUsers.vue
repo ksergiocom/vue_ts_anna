@@ -85,6 +85,7 @@
         </v-card>
         <v-form :disabled="isLoading">
             <v-combobox
+            variant="outlined"
                 :loading="isLoading"
                 :disabled="isLoading"
                 class="mt-5"

@@ -16,7 +16,9 @@
 
 <style scoped>
 div{
+    position: relative;
     z-index: 1;
+    margin-bottom: 1rem;
 }
 
 .v-enter-active,

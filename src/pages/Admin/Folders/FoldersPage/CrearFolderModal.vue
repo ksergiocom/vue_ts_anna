@@ -42,7 +42,7 @@ const crearFolder = async () => {
 
 <template>
   <v-form :disabled="isLoading" @submit.prevent="crearFolder">
-    <v-text-field v-model="folderName" :rules="rules" label="Folder name"></v-text-field>
+    <v-text-field variant="outlined" v-model="folderName" :rules="rules" label="Folder name"></v-text-field>
     <v-btn class="bg-green mt-3" type="submit" block>Create folder</v-btn>
   </v-form>
 </template>
