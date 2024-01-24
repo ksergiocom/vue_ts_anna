@@ -1,5 +1,6 @@
 <script setup lang="ts">
     import Gallery from '@/components/Gallery.vue'
+    import HeroImg from '@/assets/img/hero.jpg'
 
     import { onMounted, ref } from 'vue';
     import { PhotosService } from '@/services/photos.service';
@@ -16,12 +17,11 @@
     <main>
         <v-parallax
         id="hero"
-        src="https://cdn.vuetifyjs.com/images/parallax/material2.jpg"
+        :src="HeroImg"
         >
             <div id="hero-text" class="d-flex flex-column justify-between h-100 pa-10 text-center">
                 <div class="d-flex flex-column my-auto h-full">
-                    <h1 class="text-white ">Welcome!</h1>
-                    <p class="text-white ">Where every click tells a story.</p>
+                    <h1 class="text-white ">Hello world!</h1>
                 </div>
             </div>
         </v-parallax>
@@ -41,7 +41,7 @@
     }
 
     #hero{
-        height: 70vh;
+        height: 80vh;
     }
 
     @media (min-width: 600px) {   

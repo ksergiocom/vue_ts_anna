@@ -38,7 +38,7 @@
         height: 100%;
         width: 100%;
         object-fit: cover;
-        transition: opacity 180ms ease-in;
+        transition: opacity 150ms ease-in;
         /* transition: transform 50ms ease-in; */
     }
 
