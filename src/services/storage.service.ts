@@ -1,4 +1,4 @@
-import { getStorage, ref, listAll , uploadString, deleteObject, uploadBytes } from "firebase/storage";
+import { getStorage, ref, listAll , uploadString, deleteObject, uploadBytes, getBlob } from "firebase/storage";
 import { doc, setDoc, getDoc, deleteDoc, updateDoc } from 'firebase/firestore'
 
 import {app, db} from '@/firebase'
@@ -25,6 +25,16 @@ class StorageService {
         files = files.filter(file=>file!=='.gf')
         
         return files
+    }
+
+    public static async openFile(path:string){
+        console.log(path)
+        const fileRef = ref(storage,path)
+
+        let blob = await getBlob(fileRef)
+
+        const url = URL.createObjectURL(blob)
+        window.open(url, '_blank');
     }
 
     public static async createFolder(path:string){

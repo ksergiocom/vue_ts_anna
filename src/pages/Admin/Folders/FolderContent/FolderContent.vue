@@ -11,7 +11,7 @@
     import Modal from '@/components/UI/Modal.vue';
     import Spinner from '@/components/UI/Spinner.vue';
 
-    import { UserData } from '@/types';
+    import { UserData, Photo } from '@/types';
 
     const users = useCollection<UserData>(usersCollection) as any
     const files = ref<any[]>([])
@@ -114,6 +114,10 @@
         authorizedUsers.value = await AuthService.getAuthorizedUsers(folderName)
     }
 
+    const openFile = async (fileName:string) => {
+        await StorageService.openFile('shared/'+folderName+'/'+fileName)
+    }
+
 </script>
 
 <template>
@@ -135,7 +139,7 @@
                 <div v-if="files.length>0">
                     <v-list-item  v-for="file in files" :key="file.id">
                         <div class="d-flex justify-space-between">
-                            <span>{{ file }}</span>
+                            <span @click="openFile(file)">{{ file }}</span>
                             <v-icon class="hover" icon="mdi-close" @click="handleDeleteFile(file)"></v-icon>
                         </div>
                     </v-list-item>

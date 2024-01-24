@@ -45,11 +45,6 @@
     }
 
     @media (min-width: 600px) {   
-
-        #gallery{
-            width: 80%;
-            margin: auto;
-        }
         
         #hero-text{
             width: 75%;
@@ -59,11 +54,6 @@
     }
 
     @media (min-width: 1200px) {   
-
-        #gallery{
-            width: 85%;
-            margin: auto;
-        }
 
         #hero-text{
             width: 50%;
