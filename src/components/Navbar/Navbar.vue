@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import mainLogo from "@/assets/img/main-logo.jpg";
     import NavbarMobile from "./NavbarMobile.vue";
-    import Snackbar from "../UI/Snackbar.vue";
+    import Alert from "../UI/Alert.vue";
 </script>
 
 <template>
@@ -12,7 +12,7 @@
             </h3>
             <NavbarMobile/>
         </nav>
-        <Snackbar/>
+        <Alert/>
     </div>
 </template>
 

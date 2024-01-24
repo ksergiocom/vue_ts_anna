@@ -29,19 +29,20 @@ export const useAlertStore = defineStore('alert', () => {
     color: 'blue',
     text: '',
   })
-  const timeout = ref<NodeJS.Timeout>()
+  // const timeout = ref<NodeJS.Timeout>()
 
   function setSnackbar (data:Snackbar) {
-    if(timeout.value) clearTimeout(timeout.value)
+    // if(timeout.value) clearTimeout(timeout.value)
 
     snackbar.value = data
 
-    timeout.value = setTimeout(()=>{
-      snackbar.value = {
-        color:'blue',
-        text:''
-      }
-    },10000)    
+    // // Cerrar el alert con un timeout
+    // timeout.value = setTimeout(()=>{
+    //   snackbar.value = {
+    //     color:'blue',
+    //     text:''
+    //   }
+    // },10000)    
   }
 
   const isSet = computed(function (){
