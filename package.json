@@ -9,7 +9,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "archiver": "^6.0.1",
     "cors": "^2.8.5",
     "firebase": "^10.7.1",
     "pinia": "^2.1.7",

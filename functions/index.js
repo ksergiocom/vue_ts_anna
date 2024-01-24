@@ -1,12 +1,15 @@
 const { onObjectFinalized, onObjectDeleted } = require("firebase-functions/v2/storage");
 const { onDocumentDeleted } = require('firebase-functions/v2/firestore')
-const { getStorage , getDownloadURL} = require("firebase-admin/storage");
+const { getStorage, getDownloadURL } = require("firebase-admin/storage");
 const functionsv1 = require('firebase-functions');
 const logger = require("firebase-functions/logger");
 const path = require('path')
-const {FieldValue} = require('firebase-admin/firestore')
-const archiver = require('archiver')
-const cors = require('cors')({origin:true})
+const { FieldValue } = require('firebase-admin/firestore')
+const JSZip = require("jszip");
+const cors = require('cors')({ origin: true })
+const util = require('util');
+const stream = require('stream');
+const pipeline = util.promisify(stream.pipeline);
 
 const admin = require('firebase-admin')
 
@@ -19,10 +22,10 @@ const db = admin.firestore()
 /**
  * Resize de la imagen, cambiado a Webp y cambiado de nombre. Se borra la original.
  */
-exports.resizeImagen = onObjectFinalized({ 
+exports.resizeImagen = onObjectFinalized({
   cpu: 2,
   region: 'europe-west3',
-  memory:'1GiB',
+  memory: '1GiB',
 }, async (event) => {
 
   const fileBucket = event.data.bucket; // Bucket de almacenamiento que contiene el archivo.
@@ -37,7 +40,7 @@ exports.resizeImagen = onObjectFinalized({
   }
 
   // Aqui las imagenes SHARED
-  if(filePath.startsWith('shared/')){
+  if (filePath.startsWith('shared/')) {
     const bucket = getStorage().bucket(fileBucket);
     const downloadResponse = await bucket.file(filePath).download();
     const imageBuffer = downloadResponse[0];
@@ -53,12 +56,12 @@ exports.resizeImagen = onObjectFinalized({
       filePath: filePath,
       ancho: metadata.width, // Coloca el valor real del ancho de la imagen
       alto: metadata.height, // Coloca el valor real del alto de la imagen
-      orientacion: metadata.width>metadata.height ? "horizontal":"vertical", // Ajusta según la orientación real de la imagen
+      orientacion: metadata.width > metadata.height ? "horizontal" : "vertical", // Ajusta según la orientación real de la imagen
       pesoOriginal: imageBuffer.length, // Tamaño en bytes del archivo original
       // pesoNuevo: thumbnailBuffer.length, // Tamaño en bytes de la miniatura
       fechaSubida: FieldValue.serverTimestamp(),
     }
-  
+
     await db.collection('shared').doc(folderName).collection('files').doc(path.basename(filePath)).set(datosFirestore)
     return logger.log('Se ha guardado una imagen para compartir')
   }
@@ -67,10 +70,10 @@ exports.resizeImagen = onObjectFinalized({
   // IMAGENES PUBLIC PHOTOS _____________________________
 
   // Solo las fotos que van a public tienen que ser redimensinoadas. El resto van RAW tal cual se suben
-  if(!filePath.startsWith('public_photos/')){
+  if (!filePath.startsWith('public_photos/')) {
     return logger.log("Este archivo no es publico por eso se sube RAW")
   }
-  if (filePath.includes('rszd_')){
+  if (filePath.includes('rszd_')) {
     return logger.log("Esta imagen ya se ha sido tratada.")
   }
 
@@ -82,15 +85,15 @@ exports.resizeImagen = onObjectFinalized({
   logger.log("Imagen descargada!");
 
   // Generar una miniatura utilizando sharp.
-  const nuevoNombre = 'rszd_'+fileName+'.webp'
+  const nuevoNombre = 'rszd_' + fileName + '.webp'
   const thumbnailBuffer = await sharp(imageBuffer).resize({
     width: 800,
     height: 800,
     fit: 'inside',
     withoutEnlargement: true,
   })
-  .webp({quality:85})
-  .toBuffer()
+    .webp({ quality: 85 })
+    .toBuffer()
   logger.log("Imagen transformada");
 
   // Generar un nombre aleatorio para la nueva imagen.
@@ -110,7 +113,7 @@ exports.resizeImagen = onObjectFinalized({
     filePath: nuevoFilePath,
     ancho: metadata.width, // Coloca el valor real del ancho de la imagen
     alto: metadata.height, // Coloca el valor real del alto de la imagen
-    orientacion: metadata.width>metadata.height ? "horizontal":"vertical", // Ajusta según la orientación real de la imagen
+    orientacion: metadata.width > metadata.height ? "horizontal" : "vertical", // Ajusta según la orientación real de la imagen
     pesoOriginal: imageBuffer.length, // Tamaño en bytes del archivo original
     pesoNuevo: thumbnailBuffer.length, // Tamaño en bytes de la miniatura
     fechaSubida: FieldValue.serverTimestamp(),
@@ -122,17 +125,17 @@ exports.resizeImagen = onObjectFinalized({
 
   await bucket.file(filePath).delete(), // Eliminar la imagen original
 
-  logger.log("Nueva imagen subida y antigua eliminada.");
+    logger.log("Nueva imagen subida y antigua eliminada.");
 });
 
-exports.deleteImage = onObjectDeleted({ cpu: 2, region: 'europe-west3' },async event => {
+exports.deleteImage = onObjectDeleted({ cpu: 2, region: 'europe-west3' }, async event => {
   const filePath = event.data.name; // Ruta del archivo en el bucket.
 
   // PUBLICAS
-  if(filePath.startsWith('public_photos/')){
-    const qs = await db.collection('public_photos').where("filePath","==",filePath).get()
-    
-    qs.docs.forEach(doc=>{
+  if (filePath.startsWith('public_photos/')) {
+    const qs = await db.collection('public_photos').where("filePath", "==", filePath).get()
+
+    qs.docs.forEach(doc => {
       doc.ref.delete()
     })
 
@@ -140,12 +143,12 @@ exports.deleteImage = onObjectDeleted({ cpu: 2, region: 'europe-west3' },async e
   }
 
   // SHARED
-  if(filePath.startsWith('shared/')){
+  if (filePath.startsWith('shared/')) {
     const folderName = filePath.split('/')[1]
 
-    const qs = await db.collection('shared').doc(folderName).collection('files').where("filePath","==",filePath).get()
-    
-    qs.docs.forEach(doc=>{
+    const qs = await db.collection('shared').doc(folderName).collection('files').where("filePath", "==", filePath).get()
+
+    qs.docs.forEach(doc => {
       doc.ref.delete()
     })
 
@@ -164,16 +167,16 @@ exports.deleteImage = onObjectDeleted({ cpu: 2, region: 'europe-west3' },async e
 })
 
 
-exports.saveUserToFirestore = functionsv1.region('europe-west3').auth.user().onCreate(async user=>{
+exports.saveUserToFirestore = functionsv1.region('europe-west3').auth.user().onCreate(async user => {
   logger.log(user)
   await db.collection('users').doc(user.uid).set({
     email: user.email,
-    fechaRegistro: FieldValue.serverTimestamp(), 
+    fechaRegistro: FieldValue.serverTimestamp(),
     admin: false,
   })
 })
 
-exports.deleteUserFromFirestore = functionsv1.region('europe-west3').auth.user().onDelete(async user=>{
+exports.deleteUserFromFirestore = functionsv1.region('europe-west3').auth.user().onDelete(async user => {
   logger.log(user)
   await db.collection('users').doc(user.uid).delete()
 })
@@ -181,7 +184,7 @@ exports.deleteUserFromFirestore = functionsv1.region('europe-west3').auth.user()
 exports.sharedFolderDeletedFromFirestore = onDocumentDeleted({
   region: 'europe-west3',
   document: '/shared/{folderName}'
-}, async (event)=>{
+}, async (event) => {
   const folderName = event.params.folderName
 
 
@@ -199,40 +202,40 @@ exports.sharedFolderDeletedFromFirestore = onDocumentDeleted({
 })
 
 exports.userDeletedFromFirestore = onDocumentDeleted({
-    region: 'europe-west3',
-    document: '/users/{userId}'
-  }, async event => {
-    const userId = event.params.userId
+  region: 'europe-west3',
+  document: '/users/{userId}'
+}, async event => {
+  const userId = event.params.userId
 
-      await admin.auth().deleteUser(userId);
+  await admin.auth().deleteUser(userId);
 
-      // Recorrer la colección "shared" y actualizar los documentos
-      const sharedCollection = admin.firestore().collection('shared');
-      const sharedDocs = await sharedCollection.where('authorizedUsersId', 'array-contains', userId).get();
+  // Recorrer la colección "shared" y actualizar los documentos
+  const sharedCollection = admin.firestore().collection('shared');
+  const sharedDocs = await sharedCollection.where('authorizedUsersId', 'array-contains', userId).get();
 
-      const updatePromises = [];
+  const updatePromises = [];
 
-      sharedDocs.forEach((doc) => {
-        const authorizedUsersId = doc.data().authorizedUsersId || [];
-        const updatedAuthorizedUsersId = authorizedUsersId.filter(uid => uid !== userId);
+  sharedDocs.forEach((doc) => {
+    const authorizedUsersId = doc.data().authorizedUsersId || [];
+    const updatedAuthorizedUsersId = authorizedUsersId.filter(uid => uid !== userId);
 
-        // Actualizar el documento en la colección "shared"
-        updatePromises.push(doc.ref.update({ authorizedUsersId: updatedAuthorizedUsersId }));
-      });
+    // Actualizar el documento en la colección "shared"
+    updatePromises.push(doc.ref.update({ authorizedUsersId: updatedAuthorizedUsersId }));
+  });
 
-      await Promise.all(updatePromises);
+  await Promise.all(updatePromises);
 
-      logger.log({
-        sharedCollection,
-        sharedDocs,
-        updatePromises,
-        authorizedUsersId,
-        updated
-      })
+  logger.log({
+    sharedCollection,
+    sharedDocs,
+    updatePromises,
+    authorizedUsersId,
+    updated
+  })
 
-      console.log('Usuario eliminado correctamente y actualizado en la colección "shared".');
-      return null;
-  }
+  console.log('Usuario eliminado correctamente y actualizado en la colección "shared".');
+  return null;
+}
 )
 
 
@@ -245,10 +248,10 @@ exports.firestoreDeletedSharedDocument = onDocumentDeleted({
   const folderName = event.params.folderName
   const fileName = event.params.fileName
 
-  logger.log({folderName,fileName})
+  logger.log({ folderName, fileName })
 
   const file = await admin.storage.bucket().file(`shared/${folderName}/${fileName}`)
-  
+
   await file.delete()
 
   console.log('Se ha eliminado un registro de firestore, tambien se ha eliminado el archivo en el storage.');
@@ -266,7 +269,7 @@ exports.firestoreDeletedPublicDocument = onDocumentDeleted({
   const fileName = event.params.fileName
 
   const file = await admin.storage.bucket().file(`public_photos/${folderName}/${fileName}`)
-  
+
   await file.delete()
 
   console.log('Se ha eliminado un registro de firestore, tambien se ha eliminado el archivo en el storage.');
@@ -306,42 +309,38 @@ exports.updateAdminClaim = functionsv1.region('europe-west3').firestore
   });
 
 
-  exports.createZip = functions.region('europe-west3').https.onRequest(async (req, res) => {
+  exports.createZip = functionsv1.region('europe-west3').https.onRequest(async (req, res) => {
     cors(req, res, async () => {
-      try {
-        const { userId } = req.query;
-        
-        const authorizedFoldersQuery = admin.firestore().collection('shared').where('authorizedUsersId', 'array-contains', userId);
-        const authorizedFoldersSnapshot = await authorizedFoldersQuery.get();
-        
-        const archive = archiver('zip');
-        archive.on('error', err => res.status(500).send({ error: err.message }));
-        
-        for (const folderDoc of authorizedFoldersSnapshot.docs) {
-          const folderId = folderDoc.id;
-          
-          // Utilizamos storage.bucket() para obtener una instancia de bucket
-          const bucket = storage.bucket();
+      const { userId } = req.query;
   
-          const [files] = await bucket.getFiles({ prefix: `shared/${folderId}/` });
-          
-          for (const file of files) {
-            if (!file.name.endsWith('.gf')) {
-              const fileBuffer = await file.download();
-              archive.append(fileBuffer, { name: file.name });
-            }
-          }
+      const authorizedFoldersQuery = admin.firestore().collection('shared').where('authorizedUsersId', 'array-contains', userId);
+      const authorizedFolders = await authorizedFoldersQuery.get();
+  
+      const zip = new JSZip();
+  
+      for (const folderDoc of authorizedFolders.docs) {
+        const bucket = getStorage().bucket();
+        const [files] = await bucket.getFiles({ prefix: `shared/${folderDoc.id}/` });
+  
+        const filePromises = files
+          .filter(file => !file.name.endsWith('.gf'))
+          .map(async file => {
+            const [fileBuffer] = await file.download(); // Agrega el await aquí para esperar la descarga del archivo
+            return { name: file.name.split('/')[2], buffer: fileBuffer };
+          });
+  
+        const fileObjects = await Promise.all(filePromises);
+  
+        for (const file of fileObjects) {
+          // Agregar cada archivo al zip con el nombre correcto
+          zip.file(file.name, file.buffer); // Usa file.buffer en lugar de buffer
         }
-  
-        res.setHeader('Content-Type', 'application/zip');
-        res.setHeader('Content-Disposition', `attachment; filename="shared-photos.zip"`);
-  
-        archive.pipe(res);
-        archive.finalize();
-    
-      } catch (error) {
-        console.error(error);
-        res.status(500).send({ error: 'Error creating ZIP file.' });
       }
+  
+      // Generar el archivo ZIP y devolverlo al cliente
+      const zipBuffer = await zip.generateAsync({ type: 'nodebuffer' });
+      await pipeline(stream.Readable.from(zipBuffer), res);
+  
+      console.log('ZIP generado y enviado con éxito.');
     });
   });

@@ -10,6 +10,7 @@ import { getCurrentUser } from 'vuefire'
 
 const photos = ref<Photo[]>([])
 const isLoading = ref(false)
+const isDownloading = ref(false)
 const store = useAlertStore()
 
 async function getOrientation(blob: Blob): Promise<'horizontal' | 'vertical'> {
@@ -53,6 +54,7 @@ onMounted(async () => {
 
 
 const downloadZip = async () => {
+    isDownloading.value = true
   try {
     const user = await getCurrentUser() // Reemplaza con la lógica para obtener el ID del usuario
 
@@ -76,6 +78,8 @@ const downloadZip = async () => {
 
   } catch (error) {
     console.error(error);
+  } finally{
+    isDownloading.value = false
   }
 };
 
@@ -88,7 +92,7 @@ const downloadZip = async () => {
         <div v-else>
             <p class="text-grey text-h6" v-if="photos.length < 1">No photos shared</p>
             <div v-else >
-                <v-btn class="btn" @click="downloadZip" color="green my-2">Download all</v-btn>
+                <v-btn :disabled="isDownloading" :loading="isDownloading" class="btn" @click="downloadZip" color="green my-2">Download all</v-btn>
                 <Gallery :photos="photos" />
             </div>
         </div>
