@@ -1,12 +1,9 @@
 Haciendo:
-
-
+-> Agregar imagenes placeholders y error
 
 Pendientes:
 
--> Panel admin al hacer click que se descargue la foto
 -> Quizas refactor con v-img
--> Agregar imagenes placeholders y error
 -> Magic link para auth
 -> Crear mis composables
 -> Separar rutas en distintas paginas
@@ -20,6 +17,7 @@ Pendientes:
 
 Hechos:
 
+-> Panel admin al hacer click que se descargue la foto
 ->Cloud functions para cuando se crean folders desde firebase panel. Se tiene que guardar la referencia en firestore de las carpetas y creaer el archivo .gf
 -> Cloud Func: Cuando se elimina un usario debe eliminar todos los auth userid en firestore
 -> Agregar snackbars alert Pinia
