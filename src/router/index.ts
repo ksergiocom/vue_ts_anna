@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { auth } from '@/firebase'
 import { getCurrentUser } from 'vuefire'
 
 import HomePage from './../pages/HomePage.vue'

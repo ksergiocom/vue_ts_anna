@@ -40,6 +40,7 @@ onMounted(async () => {
         })
 
     } catch (error) {
+        console.log({error})
     store.setSnackbar({
         color: 'red',
         text: "Something went wrong!"

@@ -1,22 +1,22 @@
 Haciendo:
--> Agregar imagenes placeholders y error
+-> Setear correctmante las rules
 
 Pendientes:
 
--> Quizas refactor con v-img
+-> Cuando son muy grandes tardan en cargar en shared. Hay que descargar una por una y enseñar
 -> Magic link para auth
--> Crear mis composables
 -> Separar rutas en distintas paginas
 -> Hacer lazy imports de las rutas y componentes
 -> Crear test
 
-->Crear un contador para saber espacio disponible
+-> Espacio disponible
 -> Crear aparatado para public_photos
 -> Agregar Avisos si las listas estan vacias
 -> No me fucnionan las cloud functions! -> Si se borra un documento de firestore se tiene que borrar tambien el folder en storage
 
 Hechos:
 
+-> Agregar imagenes placeholders y error
 -> Panel admin al hacer click que se descargue la foto
 ->Cloud functions para cuando se crean folders desde firebase panel. Se tiene que guardar la referencia en firestore de las carpetas y creaer el archivo .gf
 -> Cloud Func: Cuando se elimina un usario debe eliminar todos los auth userid en firestore

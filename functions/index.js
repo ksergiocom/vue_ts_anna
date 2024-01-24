@@ -162,7 +162,7 @@ exports.deleteImage = onObjectDeleted({ cpu: 2, region: 'europe-west3' },async e
 })
 
 
-exports.saveUserToFirestore = functionsv1.auth.user().onCreate(async user=>{
+exports.saveUserToFirestore = functionsv1.region('europe-west3').auth.user().onCreate(async user=>{
   logger.log(user)
   await db.collection('users').doc(user.uid).set({
     email: user.email,
@@ -171,7 +171,7 @@ exports.saveUserToFirestore = functionsv1.auth.user().onCreate(async user=>{
   })
 })
 
-exports.deleteUserFromFirestore = functionsv1.auth.user().onDelete(async user=>{
+exports.deleteUserFromFirestore = functionsv1.region('europe-west3').auth.user().onDelete(async user=>{
   logger.log(user)
   await db.collection('users').doc(user.uid).delete()
 })
@@ -273,7 +273,7 @@ exports.firestoreDeletedPublicDocument = onDocumentDeleted({
 )
 
 
-exports.updateAdminClaim = functionsv1.firestore
+exports.updateAdminClaim = functionsv1.region('europe-west3').firestore
   .document('users/{userId}')
   .onUpdate(async (change, context) => {
     const userId = context.params.userId;

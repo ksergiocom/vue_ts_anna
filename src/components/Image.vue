@@ -1,6 +1,7 @@
 <script setup lang="ts">
     import {ref} from 'vue'
-    import MainLogo from '@/assets/img/main-logo.jpg'
+    import errorImg from '@/assets/img/error.jpg'
+    import loadingImg from '@/assets/img/loading.jpg'
     import { Photo } from '@/types'
 
     let imgTag = ref<HTMLImageElement>()
@@ -20,7 +21,8 @@
     <div @click="handleClick">
         <img ref="imgTag" class="hidden image" v-lazy="{
             src:props.photo.urlPublica,
-            loading:MainLogo,
+            loading:loadingImg,
+            error:errorImg,
         }">
     </div>
 </template>
@@ -38,7 +40,7 @@
         height: 100%;
         width: 100%;
         object-fit: cover;
-        transition: opacity 150ms ease-in;
+        transition: opacity 180ms ease-in;
         /* transition: transform 50ms ease-in; */
     }
 
