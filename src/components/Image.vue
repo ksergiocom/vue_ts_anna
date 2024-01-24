@@ -40,6 +40,7 @@
         object-fit: cover;
         transition: opacity 180ms ease-in;
         /* transition: transform 50ms ease-in; */
+        
     }
 
     .image[lazy="loading"] {

@@ -34,12 +34,12 @@
 
 
 <style scoped>
-    @media (min-width: 800px) {
+    /* @media (min-width: 800px) {
         main{
             width: 60%;
             margin: auto;
         }
-    }
+    } */
 
     #hero{
         height: 100vh;
