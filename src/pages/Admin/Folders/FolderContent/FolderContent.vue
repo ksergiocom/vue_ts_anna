@@ -118,6 +118,7 @@
         await StorageService.openFile('shared/'+folderName+'/'+fileName)
     }
 
+
 </script>
 
 <template>

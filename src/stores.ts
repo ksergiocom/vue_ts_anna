@@ -5,22 +5,26 @@ import { onAuthStateChanged } from 'firebase/auth'
 import { Snackbar } from './types'
 
 export const useAuthStore = defineStore('auth', () => {
+  const userId = ref()
   const user = ref()
   const admin = ref(false)
 
   onAuthStateChanged(auth, async (changedUser) => {
     if (changedUser) {
       const token = await changedUser.getIdTokenResult()
+      console.log({changedUser,token})
+      console.log('Cosas')
       user.value = changedUser.email
       admin.value = token.claims.admin as boolean
       console.log('User signed in!')
     } else {
       user.value = ''
       admin.value = false
+      userId.value = null
     }
   })
 
-  return { user, admin }
+  return { user, admin, userId }
 })
 
 

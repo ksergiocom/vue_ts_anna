@@ -28,13 +28,12 @@ class StorageService {
     }
 
     public static async openFile(path:string){
-        console.log(path)
         const fileRef = ref(storage,path)
 
         let blob = await getBlob(fileRef)
 
         const url = URL.createObjectURL(blob)
-        window.open(url, '_blank');
+        window.open(url);
     }
 
     public static async createFolder(path:string){

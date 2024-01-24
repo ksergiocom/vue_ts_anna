@@ -5,6 +5,8 @@ const functionsv1 = require('firebase-functions');
 const logger = require("firebase-functions/logger");
 const path = require('path')
 const {FieldValue} = require('firebase-admin/firestore')
+const archiver = require('archiver')
+const cors = require('cors')({origin:true})
 
 const admin = require('firebase-admin')
 
@@ -301,4 +303,45 @@ exports.updateAdminClaim = functionsv1.region('europe-west3').firestore
     }
 
     return null;
+  });
+
+
+  exports.createZip = functions.region('europe-west3').https.onRequest(async (req, res) => {
+    cors(req, res, async () => {
+      try {
+        const { userId } = req.query;
+        
+        const authorizedFoldersQuery = admin.firestore().collection('shared').where('authorizedUsersId', 'array-contains', userId);
+        const authorizedFoldersSnapshot = await authorizedFoldersQuery.get();
+        
+        const archive = archiver('zip');
+        archive.on('error', err => res.status(500).send({ error: err.message }));
+        
+        for (const folderDoc of authorizedFoldersSnapshot.docs) {
+          const folderId = folderDoc.id;
+          
+          // Utilizamos storage.bucket() para obtener una instancia de bucket
+          const bucket = storage.bucket();
+  
+          const [files] = await bucket.getFiles({ prefix: `shared/${folderId}/` });
+          
+          for (const file of files) {
+            if (!file.name.endsWith('.gf')) {
+              const fileBuffer = await file.download();
+              archive.append(fileBuffer, { name: file.name });
+            }
+          }
+        }
+  
+        res.setHeader('Content-Type', 'application/zip');
+        res.setHeader('Content-Disposition', `attachment; filename="shared-photos.zip"`);
+  
+        archive.pipe(res);
+        archive.finalize();
+    
+      } catch (error) {
+        console.error(error);
+        res.status(500).send({ error: 'Error creating ZIP file.' });
+      }
+    });
   });

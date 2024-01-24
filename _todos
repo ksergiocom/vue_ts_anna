@@ -1,14 +1,17 @@
 Haciendo:
+-> Zip todos los archivos shared
+-> No se abren los archivos en admin en iphone
+-> Crear carpeta public_photos
 -> Setear correctmante las rules
 
 Pendientes:
 
--> Cuando son muy grandes tardan en cargar en shared. Hay que descargar una por una y enseñar
 -> Magic link para auth
 -> Separar rutas en distintas paginas
 -> Hacer lazy imports de las rutas y componentes
 -> Crear test
 
+-> Drag and Drop orden
 -> Espacio disponible
 -> Crear aparatado para public_photos
 -> Agregar Avisos si las listas estan vacias
@@ -16,6 +19,7 @@ Pendientes:
 
 Hechos:
 
+-> Cuando son muy grandes tardan en cargar en shared. Hay que descargar una por una y enseñar
 -> Agregar imagenes placeholders y error
 -> Panel admin al hacer click que se descargue la foto
 ->Cloud functions para cuando se crean folders desde firebase panel. Se tiene que guardar la referencia en firestore de las carpetas y creaer el archivo .gf

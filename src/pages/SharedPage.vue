@@ -6,6 +6,7 @@ import { auth } from '@/firebase'
 import { Photo } from '@/types';
 import Spinner from '@/components/UI/Spinner.vue';
 import { useAlertStore } from '@/stores'
+import { getCurrentUser } from 'vuefire'
 
 const photos = ref<Photo[]>([])
 const isLoading = ref(false)
@@ -51,6 +52,34 @@ onMounted(async () => {
 })
 
 
+const downloadZip = async () => {
+  try {
+    const user = await getCurrentUser() // Reemplaza con la lógica para obtener el ID del usuario
+
+    const response = await fetch(
+      `https://europe-west3-vue-anna-dev.cloudfunctions.net/createZip?userId=${user?.uid}`
+    );
+
+    if (!response.ok) {
+      throw new Error('Error al obtener el archivo ZIP');
+    }
+
+    const blob = await response.blob();
+
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'shared-photos.zip');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+
 </script>
 
 <template>
@@ -58,7 +87,10 @@ onMounted(async () => {
         <Spinner v-if="isLoading" :opacity="50"></Spinner>
         <div v-else>
             <p class="text-grey text-h6" v-if="photos.length < 1">No photos shared</p>
-            <Gallery v-else :photos="photos" />
+            <div v-else >
+                <v-btn class="btn" @click="downloadZip" color="green my-2">Download all</v-btn>
+                <Gallery :photos="photos" />
+            </div>
         </div>
     </main>
 </template>
@@ -69,4 +101,21 @@ main {
     place-items: center;
     min-height: 50vh;
 }
+
+.btn{
+    margin: 1rem;
+}
+
+@media (min-width:500px) {
+    .btn{
+        margin: 1rem 1.3rem; 
+    }   
+}
+
+@media (min-width:1000px) {
+    .btn{
+        margin: 1rem 2rem;
+    }   
+}
+
 </style>
