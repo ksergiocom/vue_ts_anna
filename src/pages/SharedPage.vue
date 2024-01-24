@@ -29,15 +29,15 @@ onMounted(async () => {
         if (!uid) throw Error('No hay usuario logeado')
         const blobs = await PhotosService.getSharedPhotosBlobs(uid)
 
-        const orientationPromises = blobs.map(blob => getOrientation(blob));
-        const orientations = await Promise.all(orientationPromises);
-
-        blobs.forEach((blob, index) => {
+        // Mostrar las fotos de manera incremental
+        for (const blob of blobs) {
+            isLoading.value = false
+            const orientation = await getOrientation(blob);
             photos.value.push({
                 urlPublica: URL.createObjectURL(blob),
-                orientacion: orientations[index]
-            })
-        })
+                orientacion: orientation
+            });
+        }
 
     } catch (error) {
         console.log({error})
