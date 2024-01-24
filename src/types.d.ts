@@ -12,6 +12,7 @@ export type Photo = {
     fechaSubida?: FieldValue
     borrada?: boolean
     urlPublica?: string
+    aspectRatio?: '16/9'|'9/16'
 }
 
 export type Folder = {
