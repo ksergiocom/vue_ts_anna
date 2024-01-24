@@ -1,13 +1,13 @@
-import { collection, getDocs, query, limit, where } from 'firebase/firestore'
+import { collection, getDocs, query, where } from 'firebase/firestore'
 import { getStorage, ref, listAll, getBlob } from 'firebase/storage'
 
 import { db } from '@/firebase'
 import { Photo } from '@/types'
 
 class PhotosService {
-    public static async getPublicPhotos(limitTo: number = 24): Promise<Photo[]> {
+    public static async getPublicPhotos(): Promise<Photo[]> {
 
-        const q = query(collection(db, 'public_photos'), limit(limitTo))
+        const q = query(collection(db, 'public_photos'))
 
         const querySnapshot = await getDocs(q)
 

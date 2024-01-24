@@ -134,6 +134,8 @@
         photosMezcladas.unshift(...photoV2th)
 
 
+
+
         
         return photosMezcladas
     })
@@ -154,7 +156,7 @@
         height: 100%;
         display: grid;
         grid-template-columns: repeat(2, 1fr); /* Dos columnas de igual ancho */
-        grid-auto-rows: calc(0.67 * (100% / 2)); 
+        grid-auto-rows: calc(0.55 * (100vw / 2)); 
 
         grid-auto-flow: dense;
         gap: 0.7rem;
@@ -199,7 +201,7 @@
     @media (min-width:1000px) {
         .grid{
             grid-template-columns: repeat(3, 1fr); /* Dos columnas de igual ancho */
-            grid-auto-rows: calc(0.67 * (100vw / 3)); 
+            grid-auto-rows: calc(0.55 * (100vw / 3)); 
             gap: 2rem;
             margin: 2rem;
         }

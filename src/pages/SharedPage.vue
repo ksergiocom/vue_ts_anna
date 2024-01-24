@@ -67,7 +67,6 @@ onMounted(async () => {
 main {
     display: grid;
     place-items: center;
-    margin: 1rem 1rem 1rem;
     min-height: 50vh;
 }
 </style>
