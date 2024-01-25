@@ -5,8 +5,8 @@ import Gallery from '@/components/Gallery.vue';
 import { auth } from '@/firebase'
 import { Photo } from '@/types';
 import { useAlertStore } from '@/stores'
-import { getCurrentUser } from 'vuefire'
 import { getStorage, ref as refStorage, getBlob } from 'firebase/storage'
+import JSZip from 'jszip';
 
 const photos = ref<Photo[]>([])
 const isLoading = ref(false)
@@ -14,6 +14,7 @@ const isDownloading = ref(false)
 const downloadedCount = ref(0)
 const photosCount = ref(0)
 const store = useAlertStore()
+const blobsArray = ref<Blob[]>([])
 
 const progress = computed(()=>downloadedCount.value/photosCount.value*100)
 
@@ -30,6 +31,7 @@ onMounted(async () => {
         for(const photo of photosDocs){
             const photoRef = refStorage(storage, photo.filePath)
             const blob = await getBlob(photoRef)
+            blobsArray.value.push(blob)
             const url = URL.createObjectURL(blob)
             downloadedCount.value++
             photos.value.push({
@@ -54,35 +56,34 @@ onMounted(async () => {
 
 
 const downloadZip = async () => {
-    isDownloading.value = true
-  try {
-    const user = await getCurrentUser() // Reemplaza con la lógica para obtener el ID del usuario
+    isDownloading.value = true;
+    try {
+        const zip = new JSZip();
 
-    const response = await fetch(
-      `https://europe-west3-vue-anna-dev.cloudfunctions.net/createZip?userId=${user?.uid}`
-    );
+        // Agregar blobs al archivo ZIP
+        for (let i = 0; i < blobsArray.value.length; i++) {
+            const blob = blobsArray.value[i];
+            zip.file(photos.value[i].nombreOriginal, blob, { binary: true });
+        }
 
-    if (!response.ok) {
-      throw new Error('Error al obtener el archivo ZIP');
+        // Generar archivo ZIP
+        const content = await zip.generateAsync({ type: 'blob' });
+
+        // Descargar archivo ZIP
+        const url = window.URL.createObjectURL(content);
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'shared-photos.zip');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+    } catch (error) {
+        console.error(error);
+    } finally {
+        isDownloading.value = false;
     }
-
-    const blob = await response.blob();
-
-    const url = window.URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', 'shared-photos.zip');
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-
-  } catch (error) {
-    console.error(error);
-  } finally{
-    isDownloading.value = false
-  }
 };
-
 
 </script>
 
