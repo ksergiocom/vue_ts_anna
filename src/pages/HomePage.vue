@@ -19,9 +19,11 @@
         id="hero"
         :src="HeroImg"
         >
-            <div id="hero-text" class="d-flex flex-column justify-between h-100 pa-10 text-center">
-                <div class="d-flex flex-column my-auto h-full">
-                    <h1 class="text-white ">Hello world!</h1>
+            <div id="hero-text" class="d-flex flex-column h-100 pa-10">
+                <div class="d-flex flex-column h-full">
+                    <h1 class="text-white">Captura el alma cada imagen cuenta una historia única</h1>
+                    <p class="text-white mt-3">Nuestro compromiso es trascender lo visual, conectando con el alma de cada sujeto para crear un legado visual que perdure en el tiempo. Descubre el arte de la fotografía con nosotros, donde cada clic cuenta una historia inolvidable.</p>
+                    <RouterLink class="sobre-mi" to="/contact">Sobre mí</RouterLink>
                 </div>
             </div>
         </v-parallax>
@@ -40,24 +42,80 @@
         box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
     }
 
+    .sobre-mi{
+        color: white;
+        text-decoration: none;
+        border: 1px solid white;
+        background-color: rgba(255, 255, 255, 0);
+        display: inline-block;
+        width: fit-content;
+        padding: 0.5rem 1.5rem;
+        margin-top: 1rem;
+        transition: all 150ms ease-in;
+    }
+
+    .sobre-mi:hover{
+        color: black;
+        background-color: white;
+        border: 1px solid white;
+    }
+
     #hero{
         height: 80vh;
     }
 
+    #hero-text h1{
+        letter-spacing: -0.1rem;
+        line-height: 1.8rem;
+    }
+
+    #hero-text p{
+        letter-spacing: -0.01rem;
+        line-height: 1.3rem;
+    }
+
+    #hero-text a{
+        width: 100%;
+        text-align: center;
+        display: block;
+    }
+
+    @media (min-width: 400px) {   
+        
+        #hero-text{
+            width: 80%;
+            margin-right: auto;
+        }
+
+        #hero-text a{
+        width: fit-content;
+        text-align: center;
+        display: inline-block;
+    }
+
+    }
+
+
     @media (min-width: 600px) {   
         
         #hero-text{
-            width: 75%;
-            margin: auto;
+            width: 50%;
+            margin-right: auto;
         }
+
+        #hero-text a{
+        width: fit-content;
+        text-align: center;
+        display: inline-block;
+    }
 
     }
 
     @media (min-width: 1200px) {   
 
         #hero-text{
-            width: 50%;
-            margin: auto;
+            width: 40%;
+            margin-right: auto;
         }
     }
 </style>

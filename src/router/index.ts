@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { getCurrentUser } from 'vuefire'
+import {signOut} from 'firebase/auth'
+import {auth} from '@/firebase'
 
 import HomePage from './../pages/HomePage.vue'
 import ContactPage from '@/pages/ContactPage.vue'
@@ -23,6 +25,7 @@ const routes = [
         component: AdminLayout,
         beforeEnter: async (_to:any, _from:any) => {
             const user = await getCurrentUser() as any
+            if(!user) return '/'
             const token = await user.getIdTokenResult()
             if(!token.claims.admin) return '/'
             return true
@@ -69,7 +72,15 @@ const routes = [
             return true
         },
     },
-    {path:'/sign-out', component: SignOutPage},
+    {
+        path:'/sign-out',
+        component: SignOutPage,
+        beforeEnter: async (_to:any, _from:any) =>{
+            const user = await getCurrentUser()
+            if(user) await signOut(auth)
+            return '/'
+        }
+    },
     {path:'/:pathMatch(.*)*', component: NotFoundPage },
 ]
 

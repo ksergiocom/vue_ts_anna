@@ -50,7 +50,7 @@
                         </td>
                         <td class="text-right">
                             <v-chip :class="user && user.admin?'bg-red':''" v-for="user in folder.authorizedUsers" :key="user?.id">
-                                {{ user.email }}
+                                {{ user?.email }}
                             </v-chip>
                         </td>
                     </tr>
