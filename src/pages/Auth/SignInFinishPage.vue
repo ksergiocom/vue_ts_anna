@@ -74,7 +74,7 @@ onMounted(async () => {
 
 
 <style scoped>
-    .loadgin{
+    .loading{
         padding: 5rem;
         text-align: center;
         position: fixed;

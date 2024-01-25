@@ -12,7 +12,7 @@
 
     const actionCodeSettings = {
         // Aqui la ruta donde tiene que comprobarse el token
-        url: 'http://localhost:5173/sign-in/finish',
+        url: 'https://photos.ksergio.com/sign-in/finish',
         handleCodeInApp: true,
     };
 
