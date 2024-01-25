@@ -23,6 +23,39 @@ class PhotosService {
     return publicPhotos
   }
 
+  public static async getSharedPhotosDocs(userId: string): Promise<Photo[]> {
+    const authorizedFoldersQuery = query(
+      collection(db, 'shared'),
+      where('authorizedUsersId', 'array-contains', userId)
+    );
+  
+    const authorizedFoldersSnapshot = await getDocs(authorizedFoldersQuery);
+    const photos: Photo[] = [];
+  
+    for (const folderSnapshot of authorizedFoldersSnapshot.docs) {
+      const folderId = folderSnapshot.id;
+  
+      // Obtener la referencia a la colección de archivos dentro de la carpeta actual
+      const filesCollectionRef = collection(db, 'shared', folderId, 'files');
+  
+      // Obtener los documentos dentro de la colección de archivos
+      const filesSnapshot = await getDocs(filesCollectionRef);
+  
+      // Iterar sobre los documentos y agregar la información necesaria a la lista de fotos
+      filesSnapshot.forEach((fileDoc) => {
+        const fileData = fileDoc.data();
+        // Supongamos que cada documento tiene una propiedad 'url' que contiene la URL de la foto
+
+        photos.push({
+          id:fileDoc.id,
+          ...fileData,
+        });
+      });
+    }
+  
+    return photos;
+  }
+
 
   public static async getSharedPhotosBlobs(userId: string): Promise<Blob[]> {
     const authorizedFoldersQuery = query(

@@ -14,7 +14,7 @@ const users = useCollection<UserData[]>(usersCollection) as any // Aqui falta el
 
 <template>
     <div>
-        <v-btn class="bg-green mt-5" @click="showCreateModal=true">Create new user</v-btn>
+        <!-- <v-btn class="bg-green mt-5" @click="showCreateModal=true">Create new user</v-btn> -->
         <v-card class="mt-5">
             <v-table class="dark bg-grey-darken-1">
                 <tbody>
