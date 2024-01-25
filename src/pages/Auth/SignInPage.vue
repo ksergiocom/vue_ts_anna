@@ -1,31 +1,35 @@
 <script setup lang="ts">
     import {ref} from 'vue'
     import {auth} from '@/firebase'
-    import {signInWithEmailAndPassword} from 'firebase/auth'
-    import { useRouter } from 'vue-router'
+    import {sendSignInLinkToEmail} from 'firebase/auth'
     import { useAlertStore } from '@/stores'
 
-    let email = ref('')
-    let password = ref('')
     const store = useAlertStore()
-    const isLoading = ref(false)
 
-    const router = useRouter()
+    let email = ref('')
+    const isLoading = ref(false)
+    const linkSent = ref(false)
+
+    const actionCodeSettings = {
+        // Aqui la ruta donde tiene que comprobarse el token
+        url: 'http://localhost:5173/sign-in/finish',
+        handleCodeInApp: true,
+    };
+
 
     const handleSubmit = async () => {
         isLoading.value = true
         try {
-            const userCredentials = await signInWithEmailAndPassword(auth, email.value, password.value)
+            await sendSignInLinkToEmail(auth, email.value, actionCodeSettings)
+
+            // Se guarda para terminar el login en la pagin sign-in/finish
+            window.localStorage.setItem('emailForSignIn', email.value);
             store.setSnackbar({
                 color:'green',
-                text:'Loged in as '+userCredentials.user.email
+                text:'We sent you a mail to loggin!'
             })
-            const token = await userCredentials.user.getIdTokenResult()
-            if(token.claims.admin){
-                router.push('/admin')
-            }else{
-                router.push('/shared')
-            }
+            linkSent.value = true
+            
         } catch (error:any) {
             store.setSnackbar({
                 color:'red',
@@ -41,8 +45,8 @@
 <template>
     <div>
         <v-form :disabled="isLoading" class="pa-5 mt-7" @submit.prevent="handleSubmit">
+            <p v-if="linkSent" class="text-grey-darken-2 mb-5"> &#128232; Check your email!</p>
             <v-text-field variant="outlined" v-model="email" type="email" label="Email"></v-text-field>
-            <v-text-field variant="outlined" v-model="password" type="password" label="Password"></v-text-field>
             <v-btn type="submit" @click.prevent="handleSubmit" block class="bg-green">Login</v-btn>
         </v-form>
     </div>

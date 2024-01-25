@@ -7,7 +7,9 @@ import HomePage from './../pages/HomePage.vue'
 import ContactPage from '@/pages/ContactPage.vue'
 import SharedPage from '@/pages/SharedPage.vue'
 import NotFoundPage from '@/pages/NotFoundPage.vue'
+
 import SignInPage from '@/pages/Auth/SignInPage.vue'
+import SignInFinishPageVue from '@/pages/Auth/SignInFinishPage.vue'
 import SignOutPage from '@/pages/Auth/SignOutPage.vue'
 
 import AdminLayout from '@/pages/Admin/AdminLayout.vue'
@@ -71,6 +73,15 @@ const routes = [
             if(user) return '/'
             return true
         },
+    },
+        {
+            path:'/sign-in/finish',
+            component: SignInFinishPageVue,
+            beforeEnter: async (_to:any, _from:any) => {
+                const user = await getCurrentUser()
+                if(user) return '/'
+                return true
+            },
     },
     {
         path:'/sign-out',
