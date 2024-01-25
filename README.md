@@ -1,18 +1,45 @@
-# Vue 3 + TypeScript + Vite
+# Vue, TS y Firebase
+Una galería de fotos con un panel simple de administración, que permite almacenar fotos y controlar la autorización de quien puede verla o descargarla.
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+Para el backend se utiliza Firebase, un servicio BaaS de Google. Se usa firestore como base de datos, Storage como almacenamiento, Cloud functions para logica de servidor y Authentication para gestionar los usarios.
 
-## Recommended IDE Setup
+El proyecto se ha hecho sin planificar y usando algunas librerías a modo de práctica, por eso su estructura es un poco errática. Se podrían abstraer y simplificar muchas cosas. Lo dejo así para que se vea que he hestado haciendo.
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+Las cloud functions se pueden reducir con creces, los componentes se pueden abstraer en componentes más pequeños, los serivcios están repartidos de cualquier forma y a veces hago llamadas del SDK de firebase directamente en los componentes, se podrían sacar composables, etc. Lo dejo todo así **para poder ver los pasos que he seguido** creando el proyecto a ciegas.
 
-## Type Support For `.vue` Imports in TS
+## ¿Como usar?
+Primero hay que crear un archivo **firebase.config.ts** en la carpeta root con las credenciales del proyecto. 
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+```
+export const firebaseConfig = {
+  apiKey: "",
+  authDomain: "",
+  projectId: "",
+  storageBucket: "",
+  messagingSenderId: "",
+  appId: ""
+};
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
+```
 
-1. Disable the built-in TypeScript Extension
-   1. Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-   2. Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+Para construir y desplegar el proyecto hay que seguir los pasos.
+
+```
+   npm run build
+   firebase deploy
+```
+
+Es imprecindible autorizar los CORS al desplegar el proyecto. Para ello hay que utilizar gsutil para permitir mostrar y descargar de las fotos.
+
+```
+   gsutil cors set <cors-json-file> gs://<bucket_name>
+```
+
+## Cositas extras
+
+Aqui he utilizado alguna biblioteca a mayores como:
+   - Pinia
+   - Vuefire
+   - Vuetify
+   - JSzip
+   - Vue3-lazyloading
