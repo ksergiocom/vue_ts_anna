@@ -90,7 +90,7 @@ const downloadZip = async () => {
 <template>
     <main>
         <div v-if="isLoading" class="d-flex flex-column ga-3 justify-center text-center">
-            <v-progress-circular class="mx-auto" color="grey" :model-value="progress"></v-progress-circular>
+            <v-progress-circular :width="6" class="mx-auto" color="grey" :model-value="progress"></v-progress-circular>
             <p class="text-grey-darken-3">Downloaded: {{ downloadedCount }} / {{ photosCount }}</p>
         </div>
         <div v-else>

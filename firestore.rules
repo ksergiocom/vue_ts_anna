@@ -13,11 +13,11 @@ service cloud.firestore {
     // all client requests to your Firestore database will be denied until you Update
     // your rules
    match /users/{document=**} {
-      allow read, write: if isCloudFunction() || request.auth != null;
+      allow read, write: if isCloudFunction() ||  (request.auth != null && request.auth.token.admin == true);
     }
     
     match /shared/{document=**} {
-      allow read, write: if request.auth != null;
+      allow read, write: if request.auth != null && (resource.data.authorizedUsersId[request.auth.uid] == true || request.auth.token.admin == true);
     }
 
     match /public_photos/{document=*} {
