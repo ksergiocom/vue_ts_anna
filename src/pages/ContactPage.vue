@@ -7,8 +7,8 @@
         <img class="" v-lazy="Me">
         <p class="text-grey-darken-2 pa-5">Este es un proyecto creado con Vue y Firebase. Para más información seguir los enclaces de abajo</p>
         <ul class="d-flex ga-5 justify-center">
-            <li><a href="https://ksergio.com"><v-icon class="hover" size="2.5rem" icon="mdi-web"/></a></li>
-            <li><a href="https://github.com/ksergiocom"><v-icon class="hover" size="2.5rem" icon="mdi-github"/></a></li>
+            <li><a href="https://ksergio.com/serverless-con-firebase"><v-icon class="hover" size="2.5rem" icon="mdi-web"/></a></li>
+            <li><a href="https://github.com/ksergiocom/vue_ts_photos"><v-icon class="hover" size="2.5rem" icon="mdi-github"/></a></li>
             <li><a href="https://twitter.com/ksergiocom"><v-icon class="hover" size="2.5rem" icon="mdi-twitter"/></a></li>
         </ul>
     </main>
