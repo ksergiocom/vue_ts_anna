@@ -39,7 +39,7 @@
             isLoading.value = true
 
             try {
-                await StorageService.uploadFiles(`/public_photos`, uploadedFiles.value)
+                await StorageService.uploadFiles(`public_photos/`, uploadedFiles.value)
                 // Actualizar la lista de archivos después de cargar nuevos archivos
                 files.value = await StorageService.getFiles('/public_photos')
                 store.setSnackbar({
@@ -47,6 +47,7 @@
                     text:`Files uploaded`
                 })
             } catch (error) {
+                console.log({error})
                 store.setSnackbar({
                     color:'red',
                     text:`Error uploading files`

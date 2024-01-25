@@ -79,11 +79,11 @@ class StorageService {
 
 
     public static async uploadFiles(folderPath: string, files: FileList) {
-        // Verificar si la carpeta existe en Firestore
-        const docSnapshot = await getDoc(doc(db, folderPath));
-        if (!docSnapshot.exists()) {
-            return false;
-        }
+        // // Verificar si la carpeta existe en Firestore
+        // const docSnapshot = await getDoc(doc(db, folderPath));
+        // if (!docSnapshot.exists()) {
+        //     return false;
+        // }
 
         // Subir cada archivo al folder en Storage
         const uploadFilePromises = Array.from(files).map(async (file) => {
