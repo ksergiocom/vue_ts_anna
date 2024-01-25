@@ -1,7 +1,5 @@
 Haciendo:
--> Zip todos los archivos shared
 -> No se abren los archivos en admin en iphone
--> Crear carpeta public_photos
 -> Setear correctmante las rules
 
 Pendientes:
@@ -19,6 +17,8 @@ Pendientes:
 
 Hechos:
 
+-> Crear carpeta public_photos
+-> Zip todos los archivos shared
 -> Cuando son muy grandes tardan en cargar en shared. Hay que descargar una por una y enseñar
 -> Agregar imagenes placeholders y error
 -> Panel admin al hacer click que se descargue la foto
