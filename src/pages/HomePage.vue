@@ -17,14 +17,13 @@
     <main>
         <v-parallax
         id="hero"
+        class="text-white pa-10"
         :src="HeroImg"
         >
-            <div id="hero-text" class="d-flex flex-column h-100 pa-10">
-                <div class="d-flex flex-column h-full">
-                    <h1 class="text-white">Captura el alma cada imagen cuenta una historia única</h1>
-                    <p class="text-white mt-3">Nuestro compromiso es trascender lo visual, conectando con el alma de cada sujeto para crear un legado visual que perdure en el tiempo. Descubre el arte de la fotografía con nosotros, donde cada clic cuenta una historia inolvidable.</p>
-                    <RouterLink class="sobre-mi" to="/contact">Sobre mí</RouterLink>
-                </div>
+            <div id="hero-text">
+                <h1>¿No soy acaso un perro precioso?</h1>
+                <p>Si todavía no estás convencido mira bien las fotos que vienen a continuación. Seguro que te parezco irresistiblemente atractivo.</p>
+                <RouterLink class="sobre-mi" to="/contact">Sobre mí</RouterLink>
             </div>
         </v-parallax>
         <section id="gallery">
@@ -35,6 +34,7 @@
 
 
 <style scoped>
+
     article{
         background-color: white;
         border-radius: 5px;
@@ -64,9 +64,14 @@
         height: 80vh;
     }
 
+    #hero-text{
+        text-align: center;
+    }
+
     #hero-text h1{
         letter-spacing: -0.1rem;
         line-height: 1.8rem;
+        margin-bottom: 1rem;
     }
 
     #hero-text p{
@@ -85,6 +90,7 @@
         #hero-text{
             width: 80%;
             margin-right: auto;
+            text-align: left;
         }
 
         #hero-text a{

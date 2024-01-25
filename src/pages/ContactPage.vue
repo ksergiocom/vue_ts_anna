@@ -1,35 +1,41 @@
-<template>
-    <main class="pa-5">
-        <div class="text-grey-darken-4">
-            <h1 class="">Hola Mundo!</h1>
-            <p>Este es un proyecto de una galería de fotos hecha con Vue, Ts y Firebase.</p>
-            <h2 class="">¿Que tiene especial?</h2>
-            <p>Es serverless. Todo se guarda en Firebase que es un servicio Backend as a Server. </p>
-            <p>Para ello se interactua con la base de datos, autenticacion, almacenamiento mediante unos servicios expuestos
-                por ellos. Así tiene una forma un poco peculiar de seguridad.</p>
-            <p>Esto quiere decir que tienes que configurar unas reglas de seguridad especiales para dar acceso a los
-                recursos.</p>
-            <p>De igual forma, la lógica que se debería ejecutar del lado del servidor se lanza a través de cloud functions.
-            </p>
-            <p>Para ver más detalles visita <a href="https://ksergio.com/">mi web</a> o
-                <a href="https://github.com/ksergiocom/vue_ts_photos">el repositorio</a>
-            </p>
+<script setup lang="ts">
+    import Me from '@/assets/img/loading.jpg'
+</script>
 
-        </div>
+<template>
+    <main class="pa-5 center text-center">
+        <img class="" v-lazy="Me">
+        <p class="text-grey-darken-2 pa-5">Este es un proyecto creado con Vue y Firebase. Para más información seguir los enclaces de abajo</p>
+        <ul class="d-flex ga-5 justify-center">
+            <li><a href="https://ksergio.com"><v-icon class="hover" size="2.5rem" icon="mdi-web"/></a></li>
+            <li><a href="https://github.com/ksergiocom"><v-icon class="hover" size="2.5rem" icon="mdi-github"/></a></li>
+            <li><a href="https://twitter.com/ksergiocom"><v-icon class="hover" size="2.5rem" icon="mdi-twitter"/></a></li>
+        </ul>
     </main>
 </template>
 
 
 <style scoped>
-main {
-    background-color: white;
-    min-height: 100vh;
+.center{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
 }
 
+img{
+    max-height: 15rem;
+    border-radius: 100%;
+}
 
-p {
-    margin-bottom: 2rem;
-    letter-spacing: -0.02rem;
+.hover{
+    color:rgb(179, 178, 178);
+    transition: all 120ms ease-in;
+}
+
+.hover:hover{
+    color:rgb(122, 122, 122);
+    transform: scale(104%);
 }
 
 @media (min-width:600px) {

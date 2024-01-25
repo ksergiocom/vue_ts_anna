@@ -91,6 +91,7 @@ exports.resizeImagen = onObjectFinalized({
     height: 800,
     fit: 'inside',
     withoutEnlargement: true,
+    rotate: false
   })
     .webp({ quality: 85 })
     .toBuffer()
