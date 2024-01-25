@@ -12,11 +12,8 @@ export const useAuthStore = defineStore('auth', () => {
   onAuthStateChanged(auth, async (changedUser) => {
     if (changedUser) {
       const token = await changedUser.getIdTokenResult()
-      console.log({changedUser,token})
-      console.log('Cosas')
       user.value = changedUser.email
       admin.value = token.claims.admin as boolean
-      console.log('User signed in!')
     } else {
       user.value = ''
       admin.value = false
