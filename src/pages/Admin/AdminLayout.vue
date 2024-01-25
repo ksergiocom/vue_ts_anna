@@ -6,6 +6,7 @@
     <main class="pa-5">
         <v-btn-toggle density="compact">
             <v-btn :class="['bg-grey-darken-1',$route.path.includes('/admin/folders')?'':'text-grey']" to="/admin/folders">Folders</v-btn>
+            <v-btn :class="['bg-grey-darken-1',$route.path.includes('/admin/public')?'':'text-grey']" to="/admin/public">Public</v-btn>
             <v-btn :class="['bg-grey-darken-1',$route.path.includes('/admin/users')?'':'text-grey']" to="/admin/users">Users</v-btn>
         </v-btn-toggle>
         <RouterView></RouterView>

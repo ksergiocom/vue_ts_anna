@@ -14,6 +14,7 @@ import AdminUsersPage from '@/pages/Admin/Users/UsersPage.vue'
 import AdminFolderLayout from '@/pages/Admin/Folders/FolderLayout.vue'
 import AdminFoldersPage from '@/pages/Admin/Folders/FoldersPage/FoldersPage.vue'
 import AdminFolderContentPage from '@/pages/Admin/Folders/FolderContent/FolderContent.vue'
+import AdminPublicPhotosPage from '@/pages/Admin/Public/PublicPhotos.vue'
 
 const routes = [
     {path:'/', component: HomePage},
@@ -38,9 +39,13 @@ const routes = [
                     },
                     {
                         path:':folderName',
-                        component: AdminFolderContentPage
-                    }
+                        component: AdminFolderContentPage,
+                    },
                 ]
+            },
+            {
+                path:'public',
+                component: AdminPublicPhotosPage,
             },
             {path:'users', component: AdminUsersPage},
         ]
